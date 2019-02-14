@@ -1,0 +1,7 @@
+class RouteStore {
+
+
+  constructor() {
+  }
+}
+

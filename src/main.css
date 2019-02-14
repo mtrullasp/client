@@ -1,0 +1,39 @@
+html,
+body,
+#root,
+#root > div {
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  overflow-y: hidden;
+}
+
+@font-face {
+  font-family: Big John;
+  src: url("fonts/BIG JOHN.otf") format("opentype");
+}
+
+@font-face {
+  font-family: Slim Joe;
+  src: url("fonts/Slim Joe.otf") format("opentype");
+}
+
+@font-face {
+  font-family: Nectar Regular;
+  src: url("fonts/Nectar Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: Nectar Bold;
+  src: url("fonts/Nectar Bold.otf") format("opentype");
+}
+
+@font-face {
+  font-family: MrAlex;
+  src: url("fonts/MrAlex/MrAlexRegular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: MrAlexLight;
+  src: url("fonts/MrAlex/MrAlexLight.ttf") format("truetype");
+}
