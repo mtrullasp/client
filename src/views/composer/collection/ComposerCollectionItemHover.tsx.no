@@ -1,0 +1,182 @@
+import * as React from "react";
+import { Grid, Row, Col } from "react-flexbox-grid";
+import { classes, style } from "typestyle";
+import GridList from "@material-ui/core/GridList/GridList";
+import Paper from "@material-ui/core/Paper/Paper";
+import { inject, observer } from "mobx-react";
+import ContainerDimensions from "react-container-dimensions";
+import ComposerStore, { IComposer } from "../../stores/ComposerStore";
+import MasonryGrid from "../../widgets/MasonryGrid/MasonryGrid";
+import {
+  ACCENT_COLOR,
+  COMPOSER_NUMBER_COLS,
+  ELEGANT_FONT,
+  MARGIN_HORITZONTAL,
+  ROUTE_COMPOSERS_COLLECTION_BY_NACIO,
+  ROUTE_COMPOSERS_ITEM,
+  SECOND_ACCENT_COLOR
+} from "../../util/constants";
+// import TextFit from "../../widgets/TextFit/TextFit";
+// import from "react-fittext"
+import {
+  Reveal,
+  Image,
+  MenuItemProps,
+  Card,
+  Container
+} from "semantic-ui-react";
+import composer_name_style from "../../styles/composer_name_style";
+import MaxHeightContainer from "../../widgets/MaxHeightContainer";
+import {} from "react-router-dom";
+import ComposersToolbar from "../toolbar/ComposersToolbar";
+import { Route } from "react-router-dom";
+import ComposersGroupedByNacio from "../toolbar/ComposersGroupedByNacio";
+import { Switch } from "react-router-dom";
+import "@material/elevation/dist/mdc.elevation.min.css";
+import ScrollIntoViewIfNeeded from "react-scroll-into-view-if-needed";
+import Menu from "semantic-ui-react/dist/commonjs/collections/Menu";
+import { HORITZONTAL_MARGIN } from "../../Header";
+
+const FACTOR_Y = 1.2;
+
+interface IProps {
+  width: number;
+  index: number;
+  composer: IComposer;
+  composerStore?: ComposerStore;
+  history?: any;
+  onClick?: (composer: IComposer) => void;
+}
+@inject("composerStore")
+@observer
+class ComposerCollectionItemHover extends React.Component<IProps, {}> {
+  constructor(props: IProps, context: any) {
+    super(props, context);
+  }
+
+  render() {
+    if (!this.props.composerStore.composers) {
+      return null;
+    }
+    return <p>COMPONENT ITEM HOVE</p>;
+    const composer = this.props.composer;
+    const index = this.props.index;
+    const width = this.props.width;
+    const opacity = 1;
+    return (
+      <div key={composer.idMN} style={{ margin: 0 }}>
+        <ScrollIntoViewIfNeeded active={true}>
+          <div
+            style={{
+              position: "relative",
+              top: 10,
+              bottom: -10,
+              opacity: 1
+            }}
+            className={"mdc-elevation--z5"}
+          >
+            <Image
+              src={this.props.composerStore.getComposerPicture(
+                composer.IdComposer
+              )}
+              alt={composer.name}
+              style={{
+                height: width * FACTOR_Y * 1.1,
+                width: "auto",
+                opacity: 1
+              }}
+            />
+            <footer
+              style={{
+                backgroundColor: "rgba(250, 250, 250, 0.3)",
+                color: "black",
+                padding: 5,
+                fontSize: 20,
+                fontFamily: ELEGANT_FONT,
+                fontWeight: 800
+              }}
+            >
+              <div
+                style={{
+                  backgroundColor: "lightgray",
+                  maxWidth: "100%",
+                  maxHeight: "100%"
+                }}
+              >
+                <Row>
+                  <div
+                    style={{
+                      opacity: 0.7,
+                      height: 20,
+                      position: "absolute",
+                      left: 0,
+                      right: 0,
+                      margin: 5,
+                      bottom: 10, //this.props.composerStore.indexHover === index ? 20 : 50,
+                      textTransform:
+                        this.props.composerStore.indexHover === index
+                          ? "uppercase"
+                          : "none",
+                      fontFamily: ELEGANT_FONT,
+                      fontWeight: 600,
+                      color:
+                        this.props.composerStore.indexHover === index
+                          ? SECOND_ACCENT_COLOR
+                          : "inherited",
+                      fontSize: 20,
+                      textAlign: "center"
+                    }}
+                  >
+                    {this.props.composerStore.getNomDePilaComposer(
+                      composer.sort_name
+                    )}
+                  </div>
+                </Row>
+                <Row>
+                  <div
+                    style={{
+                      position: "absolute",
+                      fontWeight: 800,
+                      textAlign: "center",
+                      textTransform: "uppercase",
+                      marginRight: 0,
+                      marginLeft: 0,
+                      fontSize: 55,
+                      left: 10,
+                      right: 10,
+                      bottom: 35,
+                      fontFamily: ELEGANT_FONT,
+                      color: ACCENT_COLOR
+                    }}
+                  >
+                    {this.props.composerStore.getCognomComposer(
+                      composer.sort_name
+                    )}
+                  </div>
+                </Row>
+              </div>
+              <Row />
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  bottom: 15,
+                  fontFamily: ELEGANT_FONT,
+                  fontSize: 14,
+                  fontWeight: 800,
+                  textAlign: "center",
+                  margin: 0
+                }}
+              >
+                {composer.begin_date_year} {composer.end_date_year}
+              </div>
+            </footer>
+          </div>
+        </ScrollIntoViewIfNeeded>
+      </div>
+    );
+  }
+}
+
+export default ComposerCollectionItemHover;

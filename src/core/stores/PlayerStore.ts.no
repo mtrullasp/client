@@ -1,0 +1,122 @@
+import { action, computed, observable } from "mobx";
+import { WEB_API_HOST } from "../util/constants";
+import { observer } from "mobx-react";
+import axios, { AxiosResponse } from "axios";
+
+declare let window: any;
+interface Window {
+  DZ: any;
+}
+var DZ = window.DZ;
+
+export class PlayerStore {
+  constructor() {
+    DZ.Event.subscribe("player_play", () => {
+      this.activeTrackIndex = DZ.player.getCurrentIndex();
+    });
+  }
+
+  @action
+  goPlaylistTracks(playlistId: number) {
+    //this.history.push("http://127.0.0.1:3000/Me/Playlist/1600104235/Tracks")
+    if (!playlistId) {
+      return;
+    }
+    DZ.player.playPlaylist(playlistId, false, 0);
+    //this.history.push("/Me/Playlist/" + playlistId.toString() + "/IDeezerTracks");
+  }
+
+  /*
+    @action
+    playTrack(trackId: number) {
+      DZ.player.pause();
+      DZ.player.playTracks([trackId]);
+    }
+  */
+
+  @observable tracks: Array<number>;
+
+  @action
+  playTracks(tracks: Array<number>, numTrack: number) {
+    this.tracks = tracks;
+    this.activeTrack = numTrack;
+    DZ.player.pause();
+    DZ.player.playTracks(tracks, numTrack);
+  }
+
+  @action
+  toggleTrack(trackId: number) {
+    if (trackId === this.trackIdIsPlaying) {
+      this.trackIdIsPlaying = null;
+      DZ.player.pause();
+    } else {
+      this.trackIdIsPlaying = trackId;
+      DZ.player.playTracks([trackId]);
+    }
+    this.track
+  }
+
+  @action
+  sliderPlayClicked(e: any) {
+    var slider = $(e.delegateTarget);
+    var x = e.clientX - slider.offset().left;
+    var xMax = slider.width();
+    DZ.player.seek((x / xMax) * 100);
+  }
+
+  @observable trackIdIsPlaying: number;
+
+  @observable activeTrack: number;
+
+  @observable activeTrackIsFavorite: boolean = false;
+
+  @observable userId: string;
+
+  @action
+  toggleFavoriteTrack(idTrack: number) {
+    const URL = WEB_API_HOST + "api/TrackFavorite";
+    const data = { idTrack: idTrack, idUser: this.userId };
+    this.activeTrackIsFavorite = !this.activeTrackIsFavorite;
+    return axios.put(URL, data);
+  }
+
+  @observable userid: string;
+
+  public secondsToTimeFormat(seconds: number): string {
+    try {
+      const ret = new Date(seconds * 1000).toISOString().substr(11, 8);
+      return ret.startsWith("00:") ? ret.substr(3) : ret;
+    } catch {
+      if (!seconds) {
+        return "";
+      }
+      return seconds.toString();
+    }
+  }
+
+/*
+  @computed get activeTrackIndex(): number {
+    if (!this.tracks) {
+      return null;
+    }
+    return this.tracks.findIndex(((t) t === this.activeTrack));
+  }
+*/
+
+  @action
+  playerNext() {
+    //const index = this.activeTrackIndex + 1;debugger ;
+    //this.playerChangeIndex(index);
+    //this.activeTrack = index;
+    DZ.player.next();
+  }
+
+  @action
+  playerPrev() {
+    // const index = this.activeTrackIndex - 1;
+    // this.playerChangeIndex(index);
+    DZ.player.prev();
+  }
+
+  @observable playerIsPlaying: boolean = false;
+}

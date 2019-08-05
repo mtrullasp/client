@@ -1,0 +1,53 @@
+import {FUNNY_FONT, INFO_FONT} from "../util/constants";
+
+const paleta = {
+  accioWorkflowColor: '#455a64',
+  fontSizeForms: 13,
+  colorCorporatiu: '#455a64',
+  darkPrimaryColor: '#455A64',
+  primaryColor: '#607d8b',
+  lightPrimaryColor: '#cfd8dc',
+  textPrimaryColor: '#ffffff',
+  accentColor:  '#3e4351', //'#fc2929',
+  accentColor2: '#cd5c5c', //Indian Red
+  accentColor3: '#ff8c00', //Dark Orange
+  alternateAccentColor: '#825428',
+  quasiAccentColor: '#bb6034',
+  lightAccentColor: 'orangered',
+  veryLightAccentColor: '#f4e6d7',
+  primaryTextColor: '#212121',
+  secondaryTextColor: '#727272',
+  dividerColor: '#b6b6b6',
+  lightBackground: '#f6f6f6',
+  menuBarBackground: '#eeeeee',
+  clientBackground: '#f5f5f5',
+  headerBackground: '#eceff1',
+  headerLightBackground: '#78909c',
+  headerBackgroundOpac: 'rgba(220, 229, 233, 0.4)',
+  headerIntenseBackgroundOpac: 'rgba(176, 190, 197, 0.5)',
+  clientVeryLightBackground: '#ffffff',
+  palidBlanc: '#fefefa',
+  quasiBlanc: '#fdfdfd',
+  readOnlyBackground: '#fbfbfb',
+  selectBackgroundColor: 'white',
+  colorInterseccio: '#546e7a',
+  colorInterseccioBottom: '#cfd8dc',
+  color50: '#eceff1',
+  color75: '#dee4e7',
+  color100: '#cfd8dc',
+  color200: '#b0bec5',
+  color300: '#90a4ae',
+  color400: '#78909c',
+  color450: '#6c8794',
+  color500: '#607d8b',
+  color600: '#546e7a',
+  color700: '#455a64',
+  color800: '#37474f',
+  color900: '#3e4351',
+  color950: '#001028',
+  fontPrincipal: INFO_FONT,
+  fontAlternativa: FUNNY_FONT,
+  fontTitols: FUNNY_FONT
+};
+
+export default paleta;

@@ -1,0 +1,330 @@
+.navy * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: white; }
+.navy body {
+  position: relative;
+  max-width: 100%;
+  max-height: 100vh;
+  height: 100vh;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  background: #000a11;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5); }
+@media (max-width: 870px) {
+  @supports (-webkit-appearance: none) {
+    .navy body {
+      min-height: calc(100vh - 56px);
+      height: calc(100vh - 56px); }
+    .navy body .home .player .smallCover {
+      bottom: calc(52vh - 56px); }
+    .navy body .home .player .progress {
+      bottom: calc(49vh - 56px); } } }
+.navy .wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background: #000000; }
+.navy .loader {
+  display: flex;
+  align-items: center; }
+.navy .loader__part {
+  background: #ffffff;
+  width: 5px;
+  border-radius: 3px;
+  margin: 0 5px;
+  opacity: 0; }
+.navy .loader__part--1 {
+  animation: opacity 0.3s linear forwards, anim-1 0.5s cubic-bezier(0.8, 0, 0.6, 1) infinite alternate;
+  animation-delay: 0.3s; }
+@keyframes anim-1 {
+  0% {
+    height: 5px; }
+  100% {
+    height: 35px; } }
+.navy .loader__part--2 {
+  animation: opacity 0.3s linear forwards, anim-2 0.5s cubic-bezier(0.8, 0, 0.6, 1) infinite alternate;
+  animation-delay: 0.6s; }
+@keyframes anim-2 {
+  0% {
+    height: 5px; }
+  100% {
+    height: 38px; } }
+.navy .loader__part--3 {
+  animation: opacity 0.3s linear forwards, anim-3 0.5s cubic-bezier(0.8, 0, 0.6, 1) infinite alternate;
+  animation-delay: 0.9s; }
+@keyframes anim-3 {
+  0% {
+    height: 5px; }
+  100% {
+    height: 41px; } }
+@keyframes opacity {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+.navy .NavyPlayer {
+  display: block;
+  height: 100%;
+  width: 100%; }
+.navy .NavyPlayer > div {
+  height: 100%;
+  width: 100%;
+  position: relative; }
+.navy .NavyPlayer .background {
+  height: 100%;
+  width: 100vw;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20%;
+  position: absolute;
+  top: 60px;
+  filter: blur(15px) opacity(50);
+  opacity: 0.5;
+  overflow-y: hidden; }
+.navy .quiz .NavyPlayer .background {
+  height: 100%;
+  width: 100vw;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20%;
+  position: absolute;
+  top: 60px;
+  filter: blur(15px) opacity(50);
+  opacity: 0.8;
+  overflow-y: hidden; }
+.navy .NavyPlayer .background + div {
+  height: 100%;
+  width: 100%; }
+.navy .NavyPlayer a {
+  text-decoration: none; }
+.navy .NavyPlayer ul {
+  list-style: none; }
+.navy main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-items: flex-start;
+  width: 100vw;
+  height: 77%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 5vw; }
+.navy .active button i, .navy .active button p {
+  color: #76a5ca; }
+@media (min-width: 870px) {
+  .navy body ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+    background-color: rgba(0, 0, 0, 0);
+    -webkit-border-radius: 100px; }
+  .navy body ::-webkit-scrollbar:hover {
+    background-color: rgba(255, 255, 255, 0.1); }
+  .navy body ::-webkit-scrollbar-thumb {
+    background: black;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    -webkit-border-radius: 100px; }
+  .navy body ::-webkit-scrollbar-thumb:active {
+    background: rgba(88, 175, 209, 0.8);
+    border: none;
+    -webkit-border-radius: 100px; }
+  .navy body ::-webkit-scrollbar-thumb:vertical {
+    min-height: 10px; }
+  .navy body ::-webkit-scrollbar-thumb:horizontal {
+    min-width: 10px; }
+  .navy .NavyPlayer .background {
+    width: 100%;
+    filter: blur(0); }
+  .navy .NavyPlayer .background:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 5%, #000a11 92%); }
+  .navy .quiz .NavyPlayer .background:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 5%, #000a11 92%); } }
+.navy .player {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 10vh;
+  position: relative; }
+.navy .player .smallCover {
+  width: 10vh;
+  height: 10vh;
+  display: inline-block;
+  margin: 0;
+  background-size: cover; }
+.navy .player .smallTitle {
+  display: inline-block;
+  overflow: hidden;
+  padding: 2vh 3vw;
+  max-height: 10vh;
+  max-width: 40vw;
+  flex-direction: column;
+  justify-content: space-around; }
+.navy .player .smallTitle p:first-child {
+  font-weight: 500;
+  width: 100%;
+  font-size: 1.1em; }
+.navy .player .controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  bottom: 60px; }
+.navy .player .controls button {
+  border: none;
+  outline: none; }
+.navy .player .controls button:first-child,
+.navy .player .controls button:last-child {
+  display: none; }
+.navy .player .controls button:first-child:hover .volumeSlider {
+  visibility: visible; }
+.navy .player .controls button:nth-child(3) {
+  margin: 0 1em; }
+.navy .player .controls button:nth-child(3) img {
+  width: 2.2em; }
+.navy .player-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  /*background: rgba(0, 0, 0, 0.2);*/ }
+.navy .player .progress {
+  font-size: 0.9em;
+  font-family: "Reem Kufi", sans-serif;
+  left: 0;
+  right: 0; }
+.navy .player .progress progress[value] {
+  position: fixed;
+  bottom: 110px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: black; }
+.navy .player .progress progress[value]::-webkit-progress-bar {
+  background: #424242;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset; }
+.navy .player .progress progress[value]::-webkit-progress-value {
+  background-color: #fff;
+  border-radius: 5px; }
+.navy .player > a {
+  height: 100%;
+  width: 100%; }
+@media (min-width: 870px) {
+  .navy .player {
+    position: relative;
+    height: 10vh; }
+  .navy .player .controls {
+    right: auto; }
+  .navy .player .controls button,
+  .navy .player .controls svg {
+    cursor: pointer;
+    margin: 0 0.5em; }
+  .navy .player .controls button:first-child,
+  .navy .player .controls button:last-child {
+    display: block; }
+  .navy .player .progress {
+    /*position: absolute;*/
+    font-size: 1.1em;
+    top: 0;
+    right: 0;
+    cursor: pointer; }
+  .navy .player .progress progress[value] {
+    height: 3px;
+    width: 100%;
+    left: 0; }
+  .navy .player .progress .time {
+    position: fixed;
+    bottom: 20px;
+    right: 5vw;
+    display: block;
+    cursor: default;
+    font-size: 20px; }
+  .navy .player .progress .time .elapsed {
+    right: 1vw;
+    position: relative; }
+  .navy .player .progress .time .elapsed + span {
+    display: inline-block;
+    right: 0.5vw;
+    position: relative; }
+  .navy .player .progress .time .duration {
+    right: 0;
+    position: relative; }
+  .navy .player .time {
+    position: fixed;
+    bottom: 20px;
+    right: 0;
+    display: block;
+    font-size: 0.85em; }
+  .navy .player .time .elapsed {
+    position: absolute; }
+  .navy .player .time .elapsed + span {
+    display: none; }
+  .navy .player .time .duration {
+    right: -50vw;
+    position: absolute; } }
+.navy .player .volumeSlider {
+  visibility: hidden;
+  position: absolute;
+  top: -144px;
+  left: 0;
+  right: 0;
+  width: 3em;
+  height: 146px;
+  border-radius: 3px;
+  z-index: 1; }
+.navy .player .volumeSlider:hover {
+  visibility: visible; }
+.navy .player .volumeSlider__lineWrapper {
+  height: 128px;
+  position: absolute;
+  left: 50%;
+  margin-left: -1px;
+  bottom: 8px; }
+.navy .player .volumeSlider__bgLine {
+  width: 2px;
+  background-color: #979797;
+  height: 100%; }
+.navy .player .volumeSlider__currentLine {
+  height: 30px;
+  background-color: #ff0;
+  bottom: 0;
+  position: absolute;
+  width: 100%; }
+.navy .player .volumeSlider__ball {
+  width: 10px;
+  height: 10px;
+  background-color: #ff0;
+  border-radius: 50%;
+  overflow: hidden;
+  position: absolute;
+  bottom: 30%;
+  margin-left: -4px;
+  margin-bottom: -8px; }
+
+.quiz .navy .wrapper {
+  background: whitesmoke;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 5%, #e5e5e5 92%); }
+
+.player .controls button {
+  background: transparent; }
+

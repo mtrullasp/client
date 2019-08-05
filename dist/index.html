@@ -1,0 +1,35 @@
+<html>
+<head>
+  <title>Classical Experience. next</title>
+  <link href="http://fonts.googleapis.com/css?family=Abel|Source+Sans+Pro:400,300,300italic,400italic,600,600italic,700,700italic,900,900italic,200italic,200" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.1/dist/semantic.min.css">
+</head>
+<body style="margin: 0; overflow-y: hidden;">
+<div id="root" style="overflow-y: hidden;"></div>
+<div id="dz-root" style="display:none"></div>
+<script src="//cdns-files.deezer.com/js/min/dz.js"></script>
+<script async="">DZ && DZ.init({
+  appId: '272642',
+  channelUrl: 'http://127.0.0.1:3003/channel.html',
+  player: {
+    onload: function onload() {
+      console.log("loaded");
+      /*DZ.player.playTracks([1000000]);*/
+    }
+  }
+});
+DZ && DZ.login(function (response) {
+  if (response.authResponse) {
+    console.log('Welcome!  Fetching your information.... ');
+    DZ.api('/user/me', function (response) {
+      debugger;
+    });
+  } else {
+    console.log('User cancelled login or did not fully authorize.');
+  }
+}, {
+  perms: 'basic_access,email'
+});</script>
+<script src="/02f1eace8e341a42afcbf860e5ef4e5c.js"></script>
+</body>
+</html>

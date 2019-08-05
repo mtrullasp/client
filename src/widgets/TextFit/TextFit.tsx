@@ -3,7 +3,7 @@ import { CSSProperties } from "react";
 import { Size } from "./calcSize";
 
 interface IProps {
-  text: string;
+  text: string | JSX.Element;
   style?: CSSProperties;
   maxFontSize: number;
 }

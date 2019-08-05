@@ -1,0 +1,1 @@
+{"version":3,"file":"CollectionContainer.jsx","sourceRoot":"","sources":["../../src/collections/CollectionContainer.tsx"],"names":[],"mappings":";;AAAA,+BAA+B;AAK/B,MAAM,mBAAoB,SAAQ,KAAK,CAAC,SAAqB;IACzD,YAAY,KAAa,EAAE,OAAY;QACnC,KAAK,CAAC,KAAK,EAAE,OAAO,CAAC,CAAC;IAC1B,CAAC;IAED,MAAM;QACL,OAAO,CACJ,CAAC,GAAG,CAAC,EAAE,GAAG,CAAC,CACZ,CAAC;IACJ,CAAC;CACJ;AAED,kBAAe,mBAAmB,CAAC"}

@@ -7,33 +7,114 @@ body,
   height: 100vh;
   overflow-y: hidden;
 }
+a {
+  color: #90a4ae;
+}
 
 @font-face {
   font-family: Big John;
-  src: url("fonts/BIG JOHN.otf") format("opentype");
+  src: url("assets/fonts/BIG JOHN.otf") format("opentype");
 }
 
 @font-face {
   font-family: Slim Joe;
-  src: url("fonts/Slim Joe.otf") format("opentype");
+  src: url("assets/fonts/Slim Joe.otf") format("opentype");
 }
 
 @font-face {
   font-family: Nectar Regular;
-  src: url("fonts/Nectar Regular.otf") format("opentype");
+  src: url("assets/fonts/Nectar Regular.otf") format("opentype");
 }
 
 @font-face {
   font-family: Nectar Bold;
-  src: url("fonts/Nectar Bold.otf") format("opentype");
+  src: url("assets/fonts/Nectar Bold.otf") format("opentype");
 }
 
 @font-face {
   font-family: MrAlex;
-  src: url("fonts/MrAlex/MrAlexRegular.ttf") format("truetype");
+  src: url("assets/fonts/MrAlex/MrAlexRegular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: MrAlexLight;
-  src: url("fonts/MrAlex/MrAlexLight.ttf") format("truetype");
+  src: url("assets/fonts/MrAlex/MrAlexLight.ttf") format("truetype");
 }
+
+.banner-mozart {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  transition: background-image 2s ease-in-out;
+  background-image: url("assets/img/mozartbannerpoly.png") !important;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0px;
+  opacity: 1;
+}
+
+/**
+ OVERRIDES SEMANTIC
+ */
+
+/*
+.ui.menu {
+  z-index: 10000;
+  opacity: 1;
+}
+
+.item .content div:hover {
+  background-color: #eceff1;
+}
+
+.ui.menu {
+  background-color: transparent;
+}
+
+.ui.small.vertical.menu {
+  background-color: transparent;
+  border: none;
+}
+
+.ui.vertical.menu .item > .label {
+  background: #ff2400;
+  border-radius: 20px;
+}
+
+.ui.small.compact.menu {
+  background-color: whitesmoke;
+}
+
+.ui.grid {
+  margin-left: -8px;
+}
+
+.background-collection-items {
+  background-image: linear-gradient(#fdfbfb, #ebedee);
+  box-shadow: inset 0 0 5px hsla(0, 0%, 0%, 0.1);
+}
+
+.ui.medium.list .item .content div:hover, .ui.medium.list .content .item:hover {
+  background: white;
+  border-radius: 20px;
+  background-image: linear-gradient(#fdfbfb, #d5d5d5);
+  box-shadow: inset 0 0 5px hsla(0, 0%, 0%, 0.1);
+  font-weight: bold;
+  margin-left: 5px;
+}
+*/
+
+/*
+.ui.menu {
+  background-image: linear-gradient(#fdfbfb, #d5d5d5);
+  box-shadow: inset 0 0 5px hsla(0, 0%, 0%, 0);
+  opacity: 0.7;
+  border-radius: 20px;
+}
+
+.ui.menu .item {
+  font-weight: bold;
+  font-size: small;
+}*/

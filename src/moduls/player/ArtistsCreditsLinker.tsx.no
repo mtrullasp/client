@@ -1,0 +1,118 @@
+import * as React from "react";
+import Chip from "@material-ui/core/Chip";
+import { withStyles } from "@material-ui/core/styles";
+import { inject } from "mobx-react";
+import { AppState } from "../../stores/AppStore";
+import construct = Reflect.construct;
+import { PSEUDO_BLACK } from "../../util/constants";
+import paleta from "../../util/paleta";
+
+const styles = theme => ({
+  root: {
+    display: "flex",
+    justifyContent: "left",
+    flexWrap: "wrap"
+  },
+  chip: {
+    margin: 2,
+    padding: 0,
+    fontSize: 16,
+    fontWeight: 700,
+    height: 24,
+    position: "relative",
+    top: -6
+  }
+});
+
+interface IProps {
+  classes?: any;
+  creditsPlans: string;
+  appState?: AppState;
+  mode: "light" | "dark";
+}
+@inject("appState")
+class ArtistsCreditsLinker extends React.Component<IProps, {}> {
+  constructor(props: IProps, context: any) {
+    super(props, context);
+    this.state = { indexMouseHover: -1 };
+  }
+
+  static defaultProps = {};
+
+  state: {
+    indexMouseHover: number;
+  };
+
+  refs: {};
+
+  render() {
+    if (!this.props.creditsPlans) {
+      return null;
+    }
+    const { classes } = this.props;
+    let separator: string = null;
+    const credits = this.props.creditsPlans;
+    if (credits.includes("/")) {
+      separator = "/";
+    } else if (credits.includes(",")) {
+      separator = ",";
+    } else if (credits.includes(";")) {
+      separator = ";";
+    } else if (credits.includes("-")) {
+      separator = "-";
+    }
+    if (!separator) {
+      separator = ";";
+      //return <span>{credits}</span>;
+    }
+    const items = this.props.creditsPlans.split(separator).map((it, index) => {
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
+      return (
+        <Chip
+          style={
+            this.state.indexMouseHover === index
+              ? {
+                  color: this.props.mode === "dark" ? PSEUDO_BLACK : "white",
+                  backgroundColor:
+                    this.props.mode === "light" ? "lavenderblush" : "white"
+                }
+              : {
+                  color: this.props.mode === "dark" ? "white" : PSEUDO_BLACK,
+                  backgroundColor:
+                    this.props.mode === "light" ? "white" : PSEUDO_BLACK
+                }
+          }
+          variant="outlined"
+          className={classes.chip}
+          component="ul"
+          clickable
+          label={it}
+          onMouseLeave={() => {
+            this.setState({ indexMouseHover: -1 });
+          }}
+          onMouseEnter={() => {
+            setTimeout(() => this.setState({ indexMouseHover: index }), 0);
+          }}
+          onClick={() => {
+            this.props.appState.goAlbumsByText(it);
+          }}
+        />
+      );
+    });
+    return (
+      <div
+        className={classes.root + " linker"}
+        style={{
+          textDecoration: "none"
+        }}
+      >
+        {items}
+      </div>
+    );
+  }
+}
+
+// @ts-ignore
+export default withStyles(styles as any)(ArtistsCreditsLinker);

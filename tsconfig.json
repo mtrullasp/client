@@ -5,7 +5,13 @@
     "experimentalDecorators": true,
     "jsx": "react",
     "outDir": "dist",
-    "lib": ["dom", "es2015"]
+    "lib": ["dom", "es2015"],
+    "allowSyntheticDefaultImports": true,
+    "downlevelIteration": true
+  },
+  "parcel-plugin-typescript": {
+    // If true type-checking is disabled
+    "transpileOnly": false
   },
   "exclude": [
     "node_modules",

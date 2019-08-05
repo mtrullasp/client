@@ -1,0 +1,1 @@
+{"version":3,"file":"togglePlayer.js","sourceRoot":"","sources":["../../../src/packages/player/togglePlayer.ts"],"names":[],"mappings":";;AAEA,SAAwB,YAAY;IAClC,IAAI,MAAM,CAAC,EAAE,CAAC,MAAM,CAAC,SAAS,EAAE,EAAE;QAChC,MAAM,CAAC,EAAE,CAAC,MAAM,CAAC,KAAK,EAAE,CAAC;KAC1B;SAAM;QACL,MAAM,CAAC,EAAE,CAAC,MAAM,CAAC,IAAI,EAAE,CAAC;KACzB;AACH,CAAC;AAND,+BAMC"}

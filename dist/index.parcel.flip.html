@@ -1,0 +1,59 @@
+<script type="text/javascript" src="http://cdn-files.deezer.com/js/min/dz.js"></script>
+<html>
+  <head>
+    <title>Classical Experience. next</title>
+    <link href="http://fonts.googleapis.com/css?family=Abel|Source+Sans+Pro:400,300,300italic,400italic,600,600italic,700,700italic,900,900italic,200italic,200" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.1/dist/semantic.min.css">
+  <link rel="stylesheet" href="/src.fc45d0fd.css"></head>
+  <body style="margin: 0; overflow-y: hidden;">
+    <div className="wraper">
+      <div id="root" style="overflow-y: hidden;"></div>
+      <div id="dz-root" style="display:none"></div>
+    </div>
+    <!--<script src="https://e-cdns-files.dzcdn.net/js/min/dz.js"></script>-->
+    <script>DZ.init({
+  appId: "272642",
+  channelUrl: "http://moises-pc:3003/channel.html",
+  player: {
+    onload: function onload() {//alert("loaded ikts");
+      //DZ.player.playAlbum(2962681, true);
+    }
+  }
+});
+DZ.login(function (response) {
+  if (response.authResponse) {
+    console.log("Welcome!  Fetching your information.... ");
+    DZ.api("/user/me", function (response) {// alert("loginat");
+    });
+  } else {
+    console.log("User cancelled login or did not fully authorize.");
+  }
+}, {
+  perms: "basic_access,email"
+});</script>
+    <!--
+<script>
+  DZ.init({
+    appId: "272642",
+    channelUrl: "http://127.0.0.1:3003/channel.html",
+    player: {
+    }
+  });
+  DZ.login(
+    function(response) {
+      if (response.authResponse) {
+        console.log("Welcome!  Fetching your information.... ");
+        DZ.api("/user/me", function(response) {
+        });
+      } else {
+        alert("User cancelled login or did not fully authorize.");
+      }
+    },
+    { perms: "basic_access,email" }
+  );
+</script>
+-->
+    <script src="/src.fc45d0fd.js"></script>
+    <!--<script src="/static/bundle.js"></script>-->
+  </body>
+</html>

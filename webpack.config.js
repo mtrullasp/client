@@ -26,8 +26,16 @@ module.exports = {
         }
       },
       {
-        test: /\.(ttf|otf|eot|svg|gif)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.(ttf|otf|eot|svg|gif|jpg|png)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: "file-loader"
+      },
+      {
+        test: /\.less$/,
+        use: [
+          { loader: "style-loader" },
+          { loader: "css-loader" },
+          { loader: "less-loader" }
+        ]
       },
       {
         test: /\.css$/,
