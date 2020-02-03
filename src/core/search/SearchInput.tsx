@@ -94,7 +94,6 @@ export default class SearchInput extends Component<IProps, {}> {
 
   render() {
     const { isLoading, value, results } = this.state as any;
-
     return (
       <Search
         input={{

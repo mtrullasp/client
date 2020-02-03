@@ -7,7 +7,7 @@ import dateToStr from "../dateToStr";
 import { Typography } from "@material-ui/core";
 import * as Icon from "react-feather";
 // import {PlayerStore} from "../../../stores/PlayerStore";
-import { SECOND_ACCENT_COLOR } from "../../../util/constants";
+import { TRUE_ACCENT_COLOR } from "../../../util/constants";
 import AlbumStore from "../../../core/stores/AlbumStore";
 import { defaultValueReducer } from "@material-ui/lab/es/Slider";
 import MySlider from "../../../widgets/MySlider";
@@ -24,7 +24,7 @@ const styles = createStyles({
     height: 2
   },
   trackBefore: {
-    backgroundColor: SECOND_ACCENT_COLOR
+    backgroundColor: TRUE_ACCENT_COLOR
   },
   circle: {
     height: 40

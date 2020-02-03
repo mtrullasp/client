@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -41,8 +52,9 @@ var TDeezerTrack = (function () {
 }());
 exports.TDeezerTrack = TDeezerTrack;
 var AlbumStore = (function () {
-    function AlbumStore(performeStore, routerStore) {
+    function AlbumStore(composerStore, performeStore, routerStore) {
         var _this = this;
+        this.frizeActiveAlbumReaction = false;
         this.activeArtistIdMN = "";
         this.activeArtistNameMN = "";
         this.activeTrackPosition = 0;
@@ -51,23 +63,43 @@ var AlbumStore = (function () {
         this.albumsRaw = [];
         this.orderByKey = "";
         this.orderByDir = 1;
-        this.klassikRankWebApi = [];
-        this.activeTrackIsFavorite = false;
         this.playerIsPlaying = false;
         this.groupByField = null;
         this.activeGroupFieldValue = "";
         var that = this;
+        this.composerStore = composerStore;
+        this.routerStore = routerStore;
+        DZ.Event.subscribe("player_play", function () {
+            that.playerIsPlaying = true;
+        });
+        DZ.Event.subscribe("player_paused", function () {
+            that.playerIsPlaying = false;
+        });
+        var down = false;
+        window.addEventListener("keyup", function (event) {
+            down = false;
+        }, false);
         window.addEventListener("keydown", function (event) {
             var fer = function (callback) {
-                event.stopPropagation();
-                event.preventDefault();
-                callback();
+                if (!down) {
+                    down = true;
+                    event.stopPropagation();
+                    event.preventDefault();
+                    callback();
+                }
             };
-            if (routerStore.activeRouterPath.endsWith("/tracks")) {
+            if (routerStore.activeRouterPath.endsWith("tracks")) {
+                debugger;
                 if (event.key === "ArrowRight") {
-                    fer(function () { return that.playerNext(); });
+                    fer(function () { return that.goNext(); });
                 }
                 if (event.key === "ArrowLeft") {
+                    fer(function () { return that.goPrevious(); });
+                }
+                if (event.key === "ArrowDown") {
+                    fer(function () { return that.playerNext(); });
+                }
+                if (event.key === "ArrowUp") {
                     fer(function () { return that.playerPrev(); });
                 }
             }
@@ -76,9 +108,8 @@ var AlbumStore = (function () {
                     fer(function () { return that.getRandomTrack(); });
                 }
             }
-        });
+        }, false);
         DZ.Event.subscribe("current_track", function (track, evt_name) {
-            debugger;
             _this.trackIdIsPlaying = Number(track.track.id);
         });
         DZ.Event.subscribe("track_end", function (track, evt_name) {
@@ -91,9 +122,17 @@ var AlbumStore = (function () {
             _this.activeTrackDuration = position[1];
         });
         mobx_1.reaction(function () { return _this.activeAlbum; }, function (activeAlbum) {
-            if (_this.source) {
-                _this.source.cancel();
+            if (_this.frizeActiveAlbumReaction) {
+                _this.frizeActiveAlbumReaction = false;
+                return;
             }
+            if (!activeAlbum || routerStore.isRandom) {
+                return;
+            }
+            if (!!_this.activeAlbum && _this.activeAlbumId)
+                if (_this.source) {
+                    _this.source.cancel();
+                }
             var CancelToken = axios_1.default.CancelToken;
             _this.source = CancelToken.source();
             var zen = "";
@@ -102,7 +141,6 @@ var AlbumStore = (function () {
                 zen +
                 "?idAlbum=" +
                 activeAlbum.idAlbum;
-            debugger;
             axios_1.default
                 .get(URL_ALBUM_TRACKS, {
                 cancelToken: _this.source.token
@@ -112,7 +150,6 @@ var AlbumStore = (function () {
             });
         });
         mobx_1.reaction(function () { return _this.urlAlbumsByWork; }, function (url) {
-            debugger;
             _this.albumsRaw = [];
             var CancelToken = axios_1.default.CancelToken;
             _this.source = CancelToken.source();
@@ -121,7 +158,6 @@ var AlbumStore = (function () {
                 cancelToken: _this.source.token
             })
                 .then(function (resp) {
-                debugger;
                 _this.albumsRaw = resp.data;
             });
         });
@@ -135,25 +171,51 @@ var AlbumStore = (function () {
                 cancelToken: _this.source.token
             })
                 .then(function (resp) {
-                debugger;
                 _this.albumsRaw = resp.data;
             });
         });
     }
+    AlbumStore.prototype.getAlbumById = function (idAlbum) {
+        var _this = this;
+        if (this.source) {
+            this.source.cancel();
+        }
+        var CancelToken = axios_1.default.CancelToken;
+        this.source = CancelToken.source();
+        var zen = "";
+        var URL_ALBUM_TRACKS = constants_1.URL_WEB_API_DZK + "AlbumWorks" + zen + "?idAlbum=" + idAlbum;
+        return axios_1.default
+            .get(URL_ALBUM_TRACKS, {
+            cancelToken: this.source.token
+        })
+            .then(function (resp) {
+            _this.responseAlbumsTracks = resp.data;
+            _this.activeAlbum = resp.data.Album;
+            return _this.responseAlbumsTracks;
+        });
+    };
     Object.defineProperty(AlbumStore.prototype, "activeTrackPositionTime", {
         get: function () {
-            return this.secondsToTimeFormat(this.activeTrackPosition);
+            return this.convertSecondsToTimeFormat(this.activeTrackPosition);
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(AlbumStore.prototype, "activeTrackDurationTime", {
         get: function () {
-            return this.secondsToTimeFormat(this.activeTrackDuration);
+            return this.convertSecondsToTimeFormat(this.activeTrackDuration);
         },
         enumerable: true,
         configurable: true
     });
+    AlbumStore.prototype.clickRandom = function () {
+        if (this.routerStore.isRandom) {
+            this.getRandomTrack();
+        }
+        else {
+            this.routerStore.go(constants_1.ROUTE_RANDOM_TRACK);
+        }
+    };
     AlbumStore.prototype.searchByText = function (text) {
         var _this = this;
         this.albumsRaw = [];
@@ -191,19 +253,31 @@ var AlbumStore = (function () {
     };
     AlbumStore.prototype.getRandomTrack = function () {
         var _this = this;
-        var URL_RANDOM_TRACK = constants_1.URL_WEB_API_DZK + "RandomTrack?numComposers=40";
-        axios_1.default.get(URL_RANDOM_TRACK).then(function (resp) {
+        var URL_RANDOM_TRACK = constants_1.URL_WEB_API_DZK +
+            "RandomTrack?numComposers=" +
+            this.composerStore.RANDOM_NUM_COMPOSERS;
+        if (this.source) {
+            this.source.cancel();
+        }
+        var CancelToken = axios_1.default.CancelToken;
+        this.source = CancelToken.source();
+        var that = this;
+        axios_1.default
+            .get(URL_RANDOM_TRACK, {
+            cancelToken: this.source.token
+        })
+            .then(function (resp) {
+            that.responseAlbumsTracks = resp.data;
             debugger;
-            _this.responseAlbumsTracks = resp.data;
-            _this.activeAlbum = _this.responseAlbumsTracks.Album;
-            _this.playTracks(_this.responseAlbumsTracks.Track.idWorkOrd, 0);
+            that.activeAlbum = that.responseAlbumsTracks.Album;
+            _this.playTracks(_this.tracks, _this.responseAlbumsTracks.AlbumWorks.idWorkOrd, 0);
         });
     };
     AlbumStore.prototype.setActiveAlbum = function (album) {
         this.activeAlbum = album;
     };
     AlbumStore.prototype.setActiveAlbumById = function (idAlbum) {
-        this.activeAlbum = this.albums.find(function (a) { return a.idAlbum === idAlbum; });
+        this.getAlbumById(idAlbum);
     };
     Object.defineProperty(AlbumStore.prototype, "activeAlbumMWdeezerLink", {
         get: function () {
@@ -281,7 +355,9 @@ var AlbumStore = (function () {
         configurable: true
     });
     AlbumStore.prototype.goNext = function () {
-        debugger;
+        if (this.activeIndex >= this.albumsCount - 1) {
+            return;
+        }
         this.activeAlbum = this.albums[this.activeIndex + 1];
     };
     Object.defineProperty(AlbumStore.prototype, "isPreviousable", {
@@ -292,6 +368,9 @@ var AlbumStore = (function () {
         configurable: true
     });
     AlbumStore.prototype.goPrevious = function () {
+        if (this.activeIndex <= 0) {
+            return;
+        }
         this.activeAlbum = this.albums[this.activeIndex - 1];
     };
     Object.defineProperty(AlbumStore.prototype, "activeIndex", {
@@ -312,8 +391,7 @@ var AlbumStore = (function () {
     Object.defineProperty(AlbumStore.prototype, "activeTrack", {
         get: function () {
             var _this = this;
-            debugger;
-            if (!this.trackIdIsPlaying) {
+            if (!this.trackIdIsPlaying || !this.responseAlbumsTracks.AlbumWorks) {
                 return null;
             }
             return this.responseAlbumsTracks.AlbumWorks.find(function (t) { return t.idTrack_DZ === _this.trackIdIsPlaying; });
@@ -341,6 +419,19 @@ var AlbumStore = (function () {
             var idWork = this.activeTrack.idMC;
             var albumWork = this.responseAlbumsTracks.AlbumWorks.find(function (a) { return a.idMC === idWork; });
             return albumWork.nameWork;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(AlbumStore.prototype, "activeTrackWorkRank", {
+        get: function () {
+            if (!this.activeTrack) {
+                return null;
+            }
+            var idWork = this.activeTrack.idMC;
+            debugger;
+            var albumWork = this.responseAlbumsTracks.AlbumWorks.find(function (a) { return a.idMC === idWork; });
+            return albumWork.composerRanking;
         },
         enumerable: true,
         configurable: true
@@ -388,6 +479,28 @@ var AlbumStore = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(AlbumStore.prototype, "activeTrackPrimaryCredits", {
+        get: function () {
+            var _a;
+            return (_a = this.albumCreditRaw) === null || _a === void 0 ? void 0 : _a.filter(function (f) { return f.isPrimary; }).map(function (item) {
+                return {
+                    idMN: item.idMN,
+                    creditTip: item.idCredit.toString(),
+                    creditValue: item.nameCredit,
+                    nameMN: item.nameMN
+                };
+            });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(AlbumStore.prototype, "klassikRankTracks", {
+        get: function () {
+            return this.klassikRank.tracks.map(function (t) { return t.idTrack; });
+        },
+        enumerable: true,
+        configurable: true
+    });
     AlbumStore.prototype.getKlassikRank = function (idMC, idMCord) {
         var _this = this;
         var URL_KLASSIKRANK_TRACKS = constants_1.URL_WEB_API_DZK +
@@ -398,7 +511,9 @@ var AlbumStore = (function () {
             "&idMCord=" +
             idMCord;
         axios_1.default.get(URL_KLASSIKRANK_TRACKS).then(function (resp) {
-            _this.klassikRankWebApi = resp.data;
+            _this.klassikRank = __assign(__assign({}, resp.data), { tracks: resp.data.tracks.map(function (t) {
+                    return __assign(__assign({}, t), { duration: _this.convertSecondsToTimeFormat(t.duration) });
+                }) });
         });
     };
     AlbumStore.prototype.goPlaylistTracks = function (playlistId) {
@@ -409,17 +524,15 @@ var AlbumStore = (function () {
     };
     Object.defineProperty(AlbumStore.prototype, "tracks", {
         get: function () {
-            debugger;
             var ret = mobx_1.toJS(this.responseAlbumsTracks.AlbumWorks);
             return ret.map(function (t) { return t.idTrack_DZ; });
         },
         enumerable: true,
         configurable: true
     });
-    AlbumStore.prototype.playTracks = function (workOrd, initIndexTrack) {
-        debugger;
+    AlbumStore.prototype.playTracks = function (tracks, workOrd, initIndexTrack) {
         DZ.player.pause();
-        DZ.player.playTracks(this.tracks, initIndexTrack);
+        DZ.player.playTracks(tracks, initIndexTrack);
     };
     AlbumStore.prototype.toggleTrack = function (track) {
     };
@@ -429,13 +542,43 @@ var AlbumStore = (function () {
         var xMax = slider.width();
         DZ.player.seek((x / xMax) * 100);
     };
+    Object.defineProperty(AlbumStore.prototype, "activeTrackIsFavorite", {
+        get: function () {
+            var _a;
+            debugger;
+            return !!((_a = this.activeTrack) === null || _a === void 0 ? void 0 : _a.trackFavorit);
+        },
+        enumerable: true,
+        configurable: true
+    });
     AlbumStore.prototype.toggleFavoriteTrack = function (idTrack) {
-        var URL = constants_1.WEB_API_HOST + "api/TrackFavorite";
-        var data = { idTrack: idTrack, idUser: this.userId };
-        this.activeTrackIsFavorite = !this.activeTrackIsFavorite;
-        return axios_1.default.put(URL, data);
+        var _this = this;
+        debugger;
+        var esFavorit = !this.activeTrackIsFavorite;
+        var URL = constants_1.URL_WEB_API_DZK + "CORE_track_favBO";
+        var data = {
+            idTrack: idTrack,
+            idUser: 1111
+        };
+        debugger;
+        var config = {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        return axios_1.default
+            .post(URL, JSON.stringify(data), config)
+            .then(function (fet) {
+            debugger;
+            _this.activeTrack.trackFavorit = !!_this.activeTrack.trackFavorit
+                ? null
+                : _this.idUser;
+        })
+            .catch(function (fail) {
+            debugger;
+        });
     };
-    AlbumStore.prototype.secondsToTimeFormat = function (seconds) {
+    AlbumStore.prototype.convertSecondsToTimeFormat = function (seconds) {
         try {
             var ret = new Date(seconds * 1000).toISOString().substr(11, 8);
             return ret.startsWith("00:") ? ret.substr(3) : ret;
@@ -448,7 +591,6 @@ var AlbumStore = (function () {
         }
     };
     AlbumStore.prototype.playerNext = function () {
-        debugger;
         DZ.player.next();
     };
     AlbumStore.prototype.playerPrev = function () {
@@ -509,9 +651,9 @@ var AlbumStore = (function () {
     Object.defineProperty(AlbumStore.prototype, "numColumsAlbums", {
         get: function () {
             if (!this.groupByField) {
-                return 4;
+                return 5;
             }
-            return 3;
+            return 4;
         },
         enumerable: true,
         configurable: true
@@ -521,13 +663,24 @@ var AlbumStore = (function () {
             if (!this.responseAlbumsTracks) {
                 return null;
             }
-            var genres = __spread(new Set(this.responseAlbumsTracks.AlbumWorks.map(function (item) { return item.workGenre; })));
+            var genres = __spread(new Set((this.responseAlbumsTracks.AlbumWorks || []).map(function (item) { return item.workGenre; })));
             var genresTag = genres.map(function (g) {
                 return { text: g, linkTo: g, prompt: "genre" };
             });
             return __spread([
                 { prompt: "label", text: this.activeAlbum.label }
             ], genresTag);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(AlbumStore.prototype, "responseAlbumsTracksAlbumWorksGrouped", {
+        get: function () {
+            if (!this.responseAlbumsTracks ||
+                !this.responseAlbumsTracks.AlbumWorksGrouped) {
+                return [];
+            }
+            return this.responseAlbumsTracks.AlbumWorksGrouped;
         },
         enumerable: true,
         configurable: true
@@ -554,6 +707,9 @@ var AlbumStore = (function () {
     __decorate([
         mobx_1.computed
     ], AlbumStore.prototype, "activeTrackDurationTime", null);
+    __decorate([
+        mobx_1.action
+    ], AlbumStore.prototype, "clickRandom", null);
     __decorate([
         mobx_1.action
     ], AlbumStore.prototype, "searchByText", null);
@@ -584,6 +740,9 @@ var AlbumStore = (function () {
     __decorate([
         mobx_1.observable
     ], AlbumStore.prototype, "activeAlbum", void 0);
+    __decorate([
+        mobx_1.observable
+    ], AlbumStore.prototype, "activePlayList", void 0);
     __decorate([
         mobx_1.computed
     ], AlbumStore.prototype, "activeAlbumMWdeezerLink", null);
@@ -643,6 +802,9 @@ var AlbumStore = (function () {
     ], AlbumStore.prototype, "activeTrackWorkName", null);
     __decorate([
         mobx_1.computed
+    ], AlbumStore.prototype, "activeTrackWorkRank", null);
+    __decorate([
+        mobx_1.computed
     ], AlbumStore.prototype, "activeTrackWorkDesc", null);
     __decorate([
         mobx_1.computed
@@ -651,8 +813,14 @@ var AlbumStore = (function () {
         mobx_1.computed
     ], AlbumStore.prototype, "activeTrackCredits", null);
     __decorate([
+        mobx_1.computed
+    ], AlbumStore.prototype, "activeTrackPrimaryCredits", null);
+    __decorate([
         mobx_1.observable
-    ], AlbumStore.prototype, "klassikRankWebApi", void 0);
+    ], AlbumStore.prototype, "klassikRank", void 0);
+    __decorate([
+        mobx_1.computed
+    ], AlbumStore.prototype, "klassikRankTracks", null);
     __decorate([
         mobx_1.action
     ], AlbumStore.prototype, "getKlassikRank", null);
@@ -675,11 +843,11 @@ var AlbumStore = (function () {
         mobx_1.observable
     ], AlbumStore.prototype, "trackIdIsPlaying", void 0);
     __decorate([
-        mobx_1.observable
-    ], AlbumStore.prototype, "activeTrackIsFavorite", void 0);
+        mobx_1.computed
+    ], AlbumStore.prototype, "activeTrackIsFavorite", null);
     __decorate([
         mobx_1.observable
-    ], AlbumStore.prototype, "userId", void 0);
+    ], AlbumStore.prototype, "idUser", void 0);
     __decorate([
         mobx_1.action
     ], AlbumStore.prototype, "toggleFavoriteTrack", null);
@@ -722,6 +890,9 @@ var AlbumStore = (function () {
     __decorate([
         mobx_1.computed
     ], AlbumStore.prototype, "albumTags", null);
+    __decorate([
+        mobx_1.computed
+    ], AlbumStore.prototype, "responseAlbumsTracksAlbumWorksGrouped", null);
     __decorate([
         mobx_1.action
     ], AlbumStore.prototype, "setDzSeek", null);

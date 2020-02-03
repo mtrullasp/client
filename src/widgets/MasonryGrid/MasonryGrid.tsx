@@ -30,6 +30,8 @@ import { HotKeys } from "react-hotkeys";
 
 import { Shortcuts } from "react-shortcuts";
 
+import JustifiedGrid from "react-justified-grid";
+
 //const ReactGallery = require("react-grid-gallery");
 const SpringGrid = sc.SpringGrid;
 
@@ -100,24 +102,23 @@ class MasonryGrid extends React.Component<IProps, {}> {
       horizontalOrder: false
 */
     };
+    debugger ;
     return (
       <ContainerDimensions>
         {({ width, height }) => {
           const delta = 20;
           width -=
-            this.props.gutter * this.props.numColumns +
-            MARGIN_HORITZONTAL +
-            SCROLLBAR_WIDTH;
+            this.props.gutter * this.props.numColumns + SCROLLBAR_WIDTH;
           const columnHeight =
-            (width / this.props.numColumns) * this.props.factorY;
+            (width / this.props.numColumns) * 1; //this.props.factorY;
           return this.props.gridEngine === "stonecutter" ? (
             <div style={{ ...this.props.style }}>
               <SpringGrid
                 component="div"
                 columns={this.props.numColumns}
                 columnWidth={width / this.props.numColumns}
-                gutterWidth={20}
-                gutterHeight={20}
+                gutterWidth={this.props.gutter}
+                gutterHeight={this.props.gutter}
                 itemHeight={columnHeight}
                 springConfig={{
                   stiffness: this.props.stiffness,
@@ -135,21 +136,29 @@ class MasonryGrid extends React.Component<IProps, {}> {
               </SpringGrid>
             </div>
           ) : (
-            <ReactGallery
-              thumbnailHeight={80}
-              images={this.props.items}
-              tagStyle={{
-                color: "white",
-                fontSize: 16,
-                fontWeight: 400,
-                backgroundColor: "rgba(0,0,0,0.8)"
+            <div
+              style={{
+                display: "block",
+                minHeight: "1px",
+                width: "100%",
+                border: "1px solid #ddd",
+                overflow: "auto"
               }}
-              enableLightbox={true}
-              enableImageSelection={true}
-              onClickThumbnail={(index: number) => {
-                this.props.onClickThumbnail(this.props.items[index]);
-              }}
-            />
+            >
+              <ReactGallery
+                images={this.props.items}
+                tagStyle={{
+                  color: "white",
+                  fontSize: 16,
+                  fontWeight: 400,
+                  backgroundColor: "rgba(0,0,0,0.8)"
+                }}
+                enableLightbox={true}
+                onClickThumbnail={(index: number) => {
+                  this.props.onClickThumbnail(this.props.items[index]);
+                }}
+              />
+            </div>
           );
         }}
       </ContainerDimensions>

@@ -13,9 +13,10 @@ import {
   COMPOSER_NUMBER_COLS,
   ELEGANT_FONT,
   MARGIN_HORITZONTAL,
+  ROUTE_COMPOSER_ITEM,
   ROUTE_COMPOSERS_COLLECTION_BY_NACIO,
-  ROUTE_COMPOSERS_ITEM,
-  SECOND_ACCENT_COLOR
+  ROUTE_COMPOSERS_ITEM_WORKS,
+  TRUE_ACCENT_COLOR
 } from "../../../util/constants";
 // import TextFit from "../../widgets/TextFit/TextFit";
 // import from "react-fittext"
@@ -40,8 +41,8 @@ import { HORITZONTAL_MARGIN } from "../../../Header";
 import ComposerCollectionItem from "./ComposerCollectionItem";
 // import ComposerCollectionItemHover from "./ComposerCollectionItemHover";
 import MyCollection from "../../../widgets/MyCollection/MyCollection";
+import {motion } from "framer-motion";
 import "../../../styles/portfolio.css";
-
 const FACTOR_Y = 1.1;
 
 interface IProps {
@@ -66,6 +67,10 @@ class ComposerCollection extends React.Component<IProps, {}> {
         let contentBase = (opacity: number) => {
           return (
             <ComposerCollectionItem
+              onClick={(c: IComposer) => {
+                debugger ;this.props.composerStore.setActiveComposerId(c.idMN);
+                this.props.history.push(ROUTE_COMPOSER_ITEM);
+              }}
               width={width}
               index={index}
               composer={composer}
@@ -80,14 +85,10 @@ class ComposerCollection extends React.Component<IProps, {}> {
             onMouseLeave={() => {
               this.props.composerStore.indexHover = -1;
             }}
-            onClick={(e: any) => {
-              this.props.composerStore.activeIndex = index;
-              this.props.history.push(ROUTE_COMPOSERS_ITEM);
-            }}
             onKeyDown={e => {
               if (e.keyCode === 13) {
                 this.props.composerStore.activeIndex = index;
-                this.props.history.push(ROUTE_COMPOSERS_ITEM);
+                this.props.history.push(ROUTE_COMPOSER_ITEM);
               }
             }}
             key={composer.IdComposer}
@@ -103,35 +104,47 @@ class ComposerCollection extends React.Component<IProps, {}> {
         );
       });
     return (
-      <MyCollection
-        headerContent={<ComposersToolbar />}
-        asideLeftContent={
-          this.props.composerStore.isGroupedByNation ? (
-            <ComposersGroupedByNacio />
-          ) : null
-        }
-        sectionContent = {
-          <MaxHeightContainer
-            style={{
-              position: "relative",
-              top: 10,
-              width: "100%"
-            }}
-            footerHeight={50}
-          >
-            <MaxHeightContainer style={{}}>
-              <div style={{ margin: 0 }}>
-                <MasonryGrid
-                  gutter={0}
-                  numColumns={COMPOSER_NUMBER_COLS}
-                  items={items}
-                  factorY={FACTOR_Y}
-                />
-              </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{
+          type: "spring",
+          stiffness: 260,
+          damping: 20,
+          duration: 10000
+        }}
+        style={{ /*position: "absolute", left: MARGIN_HORITZONTAL*/ }}>
+        <MyCollection
+          headerContent={<ComposersToolbar />}
+          asideLeftContent={
+            this.props.composerStore.isGroupedByNation ? (
+              <ComposersGroupedByNacio />
+            ) : null
+          }
+          sectionContent={
+            <MaxHeightContainer
+              style={{
+                position: "relative",
+                top: 0,
+                width: "100%"
+              }}
+              footerHeight={50}
+            >
+              <MaxHeightContainer style={{ overflowY: "auto" }}>
+                <div style={{ margin: 0 }}>
+                  <MasonryGrid
+                    style={{ margin: 5 }}
+                    gutter={0}
+                    numColumns={COMPOSER_NUMBER_COLS}
+                    items={items}
+                    factorY={FACTOR_Y}
+                  />
+                </div>
+              </MaxHeightContainer>
             </MaxHeightContainer>
-          </MaxHeightContainer>
-        }
-      />
+          }
+        />
+      </motion.div>
     );
   }
 }

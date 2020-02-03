@@ -3,10 +3,10 @@ body {
 
 .tresd {
   font: 900 180px/1 'MrAlex', Arial, sans-serif;
-  line-height: 160px;
+  line-height: 120px;
   letter-spacing: 0;
   margin-top: 20px;
-  margin-left: 0;
+  margin-left: 60px;
   text-align: left;
   text-transform: uppercase;
   color: #f5f5f5; text-align: center; letter-spacing: -3px;

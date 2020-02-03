@@ -2,7 +2,7 @@ import * as React from "react";
 import { Input, Label, Menu } from "semantic-ui-react";
 import { TGroupedMenuCount } from "../stores/ComposerStore";
 import { style } from "typestyle";
-import { ACCENT_COLOR, SECOND_ACCENT_COLOR } from "../../util/constants";
+import { ACCENT_COLOR, PSEUDO_BLACK, TRUE_ACCENT_COLOR } from "../../util/constants";
 import MaxHeightContainer from "../../widgets/MaxHeightContainer";
 
 interface IProps {
@@ -24,26 +24,42 @@ class GroupedMenuCount extends React.Component<IProps, {}> {
     }
     return (
       <MaxHeightContainer
+      /*
         style={{
+          border: "none",
           overflowY: "auto",
           width: "max-content",
           overflowX: "hidden",
-          paddingRight: 10
+          paddingRight: 10,
+          backgroundColor: "transparent"
         }}
+*/
       >
-        <Menu size="small" vertical borderless={true}>
+        <Menu
+          vertical
+          size="small"
+          style={{ border: "none", backgroundColor: "transparent" }}
+          borderless={true}
+          /*
+          size="small"
+          vertical
+*/
+        >
           {!!this.props.data &&
             this.props.data.map(d => {
               return (
                 <Menu.Item
-                  className={style({ backgroundColor: "transparent" })}
                   name={d.nameMenu}
+                  style={{backgroundColor: "transparent"}}
                   active={this.props.activeItem === d.nameMenu}
                   onClick={() => {
                     this.props.onChange(d.nameMenu);
                   }}
                 >
-                  <Label style={{ backgroundColor: ACCENT_COLOR }}>
+                  <Label
+                    size={"tiny"}
+                    style={{borderRadius: 40, backgroundColor: PSEUDO_BLACK}}
+                  >
                     {d.countMenu}
                   </Label>
                   {d.nameMenu}

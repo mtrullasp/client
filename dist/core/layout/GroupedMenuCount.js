@@ -15,7 +15,6 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var semantic_ui_react_1 = require("semantic-ui-react");
-var typestyle_1 = require("typestyle");
 var constants_1 = require("../../util/constants");
 var MaxHeightContainer_1 = require("../../widgets/MaxHeightContainer");
 var GroupedMenuCount = (function (_super) {
@@ -28,18 +27,13 @@ var GroupedMenuCount = (function (_super) {
         if (!this.props.data) {
             return null;
         }
-        return (React.createElement(MaxHeightContainer_1.default, { style: {
-                overflowY: "auto",
-                width: "max-content",
-                overflowX: "hidden",
-                paddingRight: 10
-            } },
-            React.createElement(semantic_ui_react_1.Menu, { size: "small", vertical: true, borderless: true }, !!this.props.data &&
+        return (React.createElement(MaxHeightContainer_1.default, null,
+            React.createElement(semantic_ui_react_1.Menu, { vertical: true, size: "small", style: { border: "none", backgroundColor: "transparent" }, borderless: true }, !!this.props.data &&
                 this.props.data.map(function (d) {
-                    return (React.createElement(semantic_ui_react_1.Menu.Item, { className: typestyle_1.style({ backgroundColor: "transparent" }), name: d.nameMenu, active: _this.props.activeItem === d.nameMenu, onClick: function () {
+                    return (React.createElement(semantic_ui_react_1.Menu.Item, { name: d.nameMenu, style: { backgroundColor: "transparent" }, active: _this.props.activeItem === d.nameMenu, onClick: function () {
                             _this.props.onChange(d.nameMenu);
                         } },
-                        React.createElement(semantic_ui_react_1.Label, { style: { backgroundColor: constants_1.ACCENT_COLOR } }, d.countMenu),
+                        React.createElement(semantic_ui_react_1.Label, { size: "tiny", style: { borderRadius: 40, backgroundColor: constants_1.PSEUDO_BLACK } }, d.countMenu),
                         d.nameMenu));
                 }))));
     };

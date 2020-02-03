@@ -28,7 +28,7 @@ interface IProps {
 @observer
 class AlbumTracksItemOld extends React.Component<IProps, {}> {
   constructor(props: IProps, context: any) {
-    debugger;
+
     super(props, context);
     this.props.albumStore.setActiveAlbumById(
       Number(props.match.params.idAlbum)
@@ -57,6 +57,7 @@ class AlbumTracksItemOld extends React.Component<IProps, {}> {
             onClickPrevious={() => this.props.albumStore.goPrevious()}
           />
         </div>
+{/*
         <div
           style={{
             position: "absolute",
@@ -105,12 +106,13 @@ class AlbumTracksItemOld extends React.Component<IProps, {}> {
             </a>
           </h1>
         </div>
+*/}
       </div>
     );
     if (!this.props.albumStore.albumTracks) {
       return this.props.albumStore.activeAlbum.idMW;
     }
-    debugger;
+
     return (
       <div
         style={{

@@ -19,7 +19,11 @@ var EResultSearchType;
 var SearchStore = (function () {
     function SearchStore(routerStore) {
         var _this = this;
+        this.results = [];
         mobx_1.reaction(function () { return _this.searchText; }, function (text) {
+            if (_this.source) {
+                _this.source.cancel();
+            }
             _this.results = [];
             var URL_RESULTS_SEARCH = constants_1.URL_WEB_API_DZK + "search?queryText=" + text;
             var CancelToken = axios_1.default.CancelToken;
@@ -29,18 +33,34 @@ var SearchStore = (function () {
                 cancelToken: _this.source.token
             })
                 .then(function (resp) {
-                debugger;
                 _this.results = resp.data;
                 routerStore.go(constants_1.ROUTE_SEARCH_RESULTS);
             });
         });
     }
+    Object.defineProperty(SearchStore.prototype, "resultsOrd", {
+        get: function () {
+            return this.results.sort(function (c1, c2) {
+                if (!c1.itemImage && !!c2.itemImage)
+                    return 1;
+                if (!!c1.itemImage && !c2.itemImage)
+                    return -1;
+                else
+                    return 0;
+            });
+        },
+        enumerable: true,
+        configurable: true
+    });
     SearchStore.prototype.searchByText = function (text) {
         this.searchText = text;
     };
     __decorate([
         mobx_1.observable
     ], SearchStore.prototype, "results", void 0);
+    __decorate([
+        mobx_1.computed
+    ], SearchStore.prototype, "resultsOrd", null);
     __decorate([
         mobx_1.observable
     ], SearchStore.prototype, "searchText", void 0);

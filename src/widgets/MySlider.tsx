@@ -7,6 +7,7 @@ import 'rc-slider/assets/index.css';
 import paleta from "../styles/paleta";
 import "../moduls/player/playerBar.new.scss";
 import "./MySlider.css";
+import { CSSProperties } from "react";
 
 const styles = {
   root: {
@@ -24,6 +25,7 @@ const styles = {
   },
 };
 interface IProps extends SliderProps {
+  style?: CSSProperties;
   onChange?(value: number): void;
 }
 class MySlider extends React.Component<IProps> {
@@ -33,7 +35,7 @@ class MySlider extends React.Component<IProps> {
 
  render() {
     return (
-      <div style={{width: 500}}>
+      <div style={{width: 500, ...this.props.style}}>
         <Slider
           className={"progress"}
           max={this.props.max}

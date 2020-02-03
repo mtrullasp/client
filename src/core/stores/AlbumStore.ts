@@ -6,12 +6,14 @@ import {
   toJS,
   transaction
 } from "mobx";
-import axios, { CancelTokenSource } from "axios";
+import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import {
   COMPOSER_NUMBER_COLS,
-  ROUTE_COMPOSERS_ITEM,
+  ROUTE_COMPOSERS_ITEM_WORKS,
+  ROUTE_RANDOM_TRACK,
   URL_WEB_API,
   URL_WEB_API_DZK,
+  WEB_API_DZK,
   WEB_API_HOST,
   ZEN
 } from "../../util/constants";
@@ -27,12 +29,20 @@ import {
   Track
 } from "./albumStore/ResponseAlbumTracks";
 import { ILinkTag } from "../../views/album/toolbar/AlbumTags";
+import { duration } from "@material-ui/core/styles";
+import { IPlayListWork } from "../../views/album/playlist/PlayList";
 
 declare let window: any;
 interface Window {
   DZ: any;
 }
 var DZ = window.DZ;
+
+interface ICoreTrackFavPost {
+  idTrack: number;
+  idUser: number;
+  esFavorit: boolean;
+}
 
 export interface IResponseAlbumTracks {
   Tracks: ITracksView[];
@@ -44,6 +54,7 @@ export interface IAlbumCredit {
   idCredit: number;
   nameCredit: string;
   isMusical?: boolean;
+  isPrimary: boolean;
   nameMN: string;
   idMN: string;
   nameMW: string;
@@ -78,16 +89,58 @@ export interface IAlbumTrack {
 }
 
 export interface IKlassikRank {
+  workName: string;
+  workItemOrder: number;
+  workItemName: string;
+  workComposerName: string;
+  tracks: Array<IKlassikRankTrack>;
+}
+export interface IKlassikRankWebApi {
+  workName: string;
+  workItemOrder: number;
+  workItemName: string;
+  workComposerName: string;
+  tracks: Array<IKlassikRankTrackWebApi>;
+}
+export interface IKlassikRankTrack {
+  idAlbum: number;
+  albumName: string;
+  coverBig: string;
+  duration: string;
+  idTrack: number;
+  mainArtists: Array<string>;
+}
+export interface IKlassikRankTrackWebApi {
   idAlbum: number;
   albumName: string;
   coverBig: string;
   duration: number;
   idTrack: number;
-  mainArtists: string;
+  mainArtists: Array<string>;
 }
 
 export interface IAlbum {
   idAlbum: number;
+  idMW: string;
+  idDeezer: number;
+  nameMW: string;
+  urlCover: string;
+  urlCoverAM: string;
+  scoreImageCompare: number;
+  nameMN: string;
+  prestige: number;
+  label: string;
+  nb_works: number;
+  releaseDate: Date;
+  composers: string;
+  // mainArtist: string;
+}
+
+export interface IPlayListTrack {
+  idPlayList: string;
+  idAlbum: number;
+  idTrack: number;
+  idTrackOrd: number;
   idMW: string;
   idDeezer: number;
   nameMW: string;
@@ -245,6 +298,7 @@ export interface ITrackRoot {
 
 export interface ITracksView {
   composerName: string;
+  composerRanking: number;
   nameWork: string;
   workGenre: string;
   workType: string;
@@ -258,33 +312,92 @@ export interface ITracksView {
   idrack_DZ_ord: number;
   description: string;
   descriptionAuthor: string;
+  trackFavorit?: number;
+}
+
+export interface IWorksView {
+  composerName: string;
+  composerId: string;
+  nameWork: string;
+  workGenre: string;
+  workType: string;
+  featured: string;
+  idMC: string;
+  idMC_ord: number;
+  description: string;
+  descriptionAuthor: string;
+  tracks: Array<ITrackView>;
+}
+
+export interface ITrackView {
+  idTrack_DZ: number;
+  idAlbum_DZ: number;
+  name: string;
+  duration: number;
+  idrack_DZ_ord: number;
 }
 
 class AlbumStore {
-  constructor(performeStore: PerformerStore, routerStore: RouterStore) {
+  constructor(
+    composerStore: ComposerStore,
+    performeStore: PerformerStore,
+    routerStore: RouterStore
+  ) {
     const that = this;
-    window.addEventListener("keydown", event => {
-      const fer = function(callback: Function) {
-        event.stopPropagation();
-        event.preventDefault();
-        callback();
-      };
-      if (routerStore.activeRouterPath.endsWith("/tracks")) {
-        if (event.key === "ArrowRight") {
-          fer(() => that.playerNext());
-        }
-        if (event.key === "ArrowLeft") {
-          fer(() => that.playerPrev());
-        }
-      } else if (routerStore.activeRouterPath.endsWith("/random")) {
-        if (event.key === "ArrowRight") {
-          fer(() => that.getRandomTrack());
-        }
-      }
+
+    this.composerStore = composerStore;
+    this.routerStore = routerStore;
+
+    DZ.Event.subscribe("player_play", () => {
+      that.playerIsPlaying = true;
     });
 
+    DZ.Event.subscribe("player_paused", () => {
+      that.playerIsPlaying = false;
+    });
+    let down: boolean = false;
+    window.addEventListener(
+      "keyup",
+      event => {
+        down = false;
+      },
+      false
+    );
+    window.addEventListener(
+      "keydown",
+      event => {
+        const fer = function(callback: Function) {
+          if (!down) {
+            down = true;
+            event.stopPropagation();
+            event.preventDefault();
+            callback();
+          }
+        };
+        if (routerStore.activeRouterPath.endsWith("tracks")) {
+          debugger;
+          if (event.key === "ArrowRight") {
+            fer(() => that.goNext());
+          }
+          if (event.key === "ArrowLeft") {
+            fer(() => that.goPrevious());
+          }
+          if (event.key === "ArrowDown") {
+            fer(() => that.playerNext());
+          }
+          if (event.key === "ArrowUp") {
+            fer(() => that.playerPrev());
+          }
+        } else if (routerStore.activeRouterPath.endsWith("/random")) {
+          if (event.key === "ArrowRight") {
+            fer(() => that.getRandomTrack());
+          }
+        }
+      },
+      false
+    );
+
     DZ.Event.subscribe("current_track", (track: ITrackRoot, evt_name) => {
-      debugger;
       this.trackIdIsPlaying = Number(track.track.id);
     });
 
@@ -305,10 +418,18 @@ class AlbumStore {
     reaction(
       () => this.activeAlbum,
       activeAlbum => {
-        //debugger ;this.activeAlbumMWid = null;
-        if (this.source) {
-          this.source.cancel();
+        if (this.frizeActiveAlbumReaction) {
+          this.frizeActiveAlbumReaction = false;
+          return;
         }
+        if (!activeAlbum || routerStore.isRandom) {
+          return;
+        }
+        if (!!this.activeAlbum && this.activeAlbumId)
+          if (this.source) {
+            //debugger ;this.activeAlbumMWid = null;
+            this.source.cancel();
+          }
         const CancelToken = axios.CancelToken;
         this.source = CancelToken.source();
 
@@ -319,7 +440,7 @@ class AlbumStore {
           zen +
           "?idAlbum=" +
           activeAlbum.idAlbum;
-        debugger;
+
         axios
           .get<IResponseAlbumTracksRoot>(URL_ALBUM_TRACKS, {
             cancelToken: this.source.token
@@ -333,7 +454,6 @@ class AlbumStore {
     reaction(
       () => this.urlAlbumsByWork,
       (url: string) => {
-        debugger;
         this.albumsRaw = [];
         const CancelToken = axios.CancelToken;
         this.source = CancelToken.source();
@@ -342,7 +462,6 @@ class AlbumStore {
             cancelToken: this.source.token
           })
           .then(resp => {
-            debugger;
             this.albumsRaw = resp.data;
           });
       }
@@ -360,25 +479,57 @@ class AlbumStore {
             cancelToken: this.source.token
           })
           .then(resp => {
-            debugger;
             this.albumsRaw = resp.data;
           });
       }
     );
   }
 
+  private frizeActiveAlbumReaction: boolean = false;
   private source: CancelTokenSource;
+  private routerStore: RouterStore;
+
+  private getAlbumById(idAlbum: number): Promise<IResponseAlbumTracksRoot> {
+    if (this.source) {
+      this.source.cancel();
+    }
+    const CancelToken = axios.CancelToken;
+    this.source = CancelToken.source();
+
+    const zen = ""; // ZEN;
+    const URL_ALBUM_TRACKS =
+      URL_WEB_API_DZK + "AlbumWorks" + zen + "?idAlbum=" + idAlbum;
+
+    return axios
+      .get<IResponseAlbumTracksRoot>(URL_ALBUM_TRACKS, {
+        cancelToken: this.source.token
+      })
+      .then(resp => {
+        this.responseAlbumsTracks = resp.data;
+        this.activeAlbum = resp.data.Album;
+        return this.responseAlbumsTracks;
+        //this.frizeActiveAlbumReaction = true;
+      });
+  }
 
   @observable activeArtistIdMN: string = "";
   @observable activeArtistNameMN: string = "";
 
   @observable activeTrackPosition: number = 0;
   @computed get activeTrackPositionTime(): string {
-    return this.secondsToTimeFormat(this.activeTrackPosition);
+    return this.convertSecondsToTimeFormat(this.activeTrackPosition);
   }
   @observable activeTrackDuration: number = 0;
   @computed get activeTrackDurationTime(): string {
-    return this.secondsToTimeFormat(this.activeTrackDuration);
+    return this.convertSecondsToTimeFormat(this.activeTrackDuration);
+  }
+
+  @action clickRandom() {
+    if (this.routerStore.isRandom) {
+      this.getRandomTrack();
+    } else {
+      this.routerStore.go(ROUTE_RANDOM_TRACK);
+    }
   }
 
   @action searchByText(text: string) {
@@ -429,27 +580,51 @@ class AlbumStore {
   @observable worksFets: boolean = true;
 
   @action getRandomTrack() {
-    const URL_RANDOM_TRACK = URL_WEB_API_DZK + "RandomTrack?numComposers=40";
-    axios.get<IResponseAlbumTracksRoot>(URL_RANDOM_TRACK).then(resp => {
-      debugger;
-      this.responseAlbumsTracks = resp.data;
-      this.activeAlbum = this.responseAlbumsTracks.Album;
-/*
+    const URL_RANDOM_TRACK =
+      URL_WEB_API_DZK +
+      "RandomTrack?numComposers=" +
+      this.composerStore.RANDOM_NUM_COMPOSERS;
+    if (this.source) {
+      this.source.cancel();
+    }
+    const CancelToken = axios.CancelToken;
+    this.source = CancelToken.source();
+    const that = this;
+    axios
+      .get<IResponseAlbumTracksRoot>(URL_RANDOM_TRACK, {
+        cancelToken: this.source.token
+      })
+      .then(resp => {
+        that.responseAlbumsTracks = resp.data;
+        debugger;
+        that.activeAlbum = that.responseAlbumsTracks.Album;
+        /*
       this.responseAlbumsTracks.AlbumWorks = [
         this.responseAlbumsTracks.AlbumWorks
       ];
 */
-      this.playTracks(this.responseAlbumsTracks.Track.idWorkOrd, 0);
-    });
+        this.playTracks(
+          this.tracks,
+          this.responseAlbumsTracks.AlbumWorks.idWorkOrd,
+          0
+        );
+      });
   }
   // @observable activeAlbumMWid: string;
   @action setActiveAlbum(album: IAlbum) {
     this.activeAlbum = album;
   }
   @action setActiveAlbumById(idAlbum: number) {
+    this.getAlbumById(idAlbum);
+    /*
     this.activeAlbum = this.albums.find(a => a.idAlbum === idAlbum);
+    if (!this.activeAlbum) {
+      this.activeAlbum = <IAlbum>{ idAlbum: idAlbum };
+    }
+*/
   }
   @observable activeAlbum: IAlbum;
+  @observable activePlayList: Array<IPlayListTrack>;
   @computed get activeAlbumMWdeezerLink(): string {
     if (!this.activeAlbum) {
       return "";
@@ -523,7 +698,9 @@ class AlbumStore {
     return this.activeIndex < this.albums.length - 1;
   }
   @action goNext() {
-    debugger;
+    if (this.activeIndex >= this.albumsCount - 1) {
+      return;
+    }
     this.activeAlbum = this.albums[this.activeIndex + 1];
   }
 
@@ -531,6 +708,9 @@ class AlbumStore {
     return this.activeIndex > 0;
   }
   @action goPrevious() {
+    if (this.activeIndex <= 0) {
+      return;
+    }
     this.activeAlbum = this.albums[this.activeIndex - 1];
   }
 
@@ -550,8 +730,7 @@ class AlbumStore {
   }
 
   @computed get activeTrack(): ITracksView {
-    debugger;
-    if (!this.trackIdIsPlaying) {
+    if (!this.trackIdIsPlaying || !this.responseAlbumsTracks.AlbumWorks) {
       return null;
     }
     /*
@@ -586,6 +765,18 @@ class AlbumStore {
       a => a.idMC === idWork
     );
     return albumWork.nameWork;
+  }
+
+  @computed get activeTrackWorkRank(): number {
+    if (!this.activeTrack) {
+      return null;
+    }
+    const idWork = this.activeTrack.idMC;
+    debugger;
+    const albumWork = this.responseAlbumsTracks.AlbumWorks.find(
+      a => a.idMC === idWork
+    );
+    return albumWork.composerRanking;
   }
 
   @computed get activeTrackWorkDesc(): string {
@@ -626,7 +817,23 @@ class AlbumStore {
       });
   }
 
-  @observable klassikRankWebApi: Array<IKlassikRank> = [];
+  @computed get activeTrackPrimaryCredits(): Array<ICreditLink> {
+    return this.albumCreditRaw
+      ?.filter(f => f.isPrimary)
+      .map(item => {
+        return <ICreditLink>{
+          idMN: item.idMN,
+          creditTip: item.idCredit.toString(),
+          creditValue: item.nameCredit,
+          nameMN: item.nameMN
+        };
+      });
+  }
+
+  @observable klassikRank: IKlassikRank;
+  @computed get klassikRankTracks(): Array<number> {
+    return this.klassikRank.tracks.map(t => t.idTrack);
+  }
   @action getKlassikRank(idMC: string, idMCord: number) {
     const URL_KLASSIKRANK_TRACKS =
       URL_WEB_API_DZK +
@@ -636,8 +843,16 @@ class AlbumStore {
       idMC +
       "&idMCord=" +
       idMCord;
-    axios.get<Array<IKlassikRank>>(URL_KLASSIKRANK_TRACKS).then(resp => {
-      this.klassikRankWebApi = resp.data;
+    axios.get<IKlassikRankWebApi>(URL_KLASSIKRANK_TRACKS).then(resp => {
+      this.klassikRank = {
+        ...resp.data,
+        tracks: resp.data.tracks.map(t => {
+          return {
+            ...t,
+            duration: this.convertSecondsToTimeFormat(t.duration)
+          } as IKlassikRankTrack;
+        })
+      };
     });
   }
 
@@ -673,7 +888,7 @@ class AlbumStore {
         }
       );
 */
-    debugger;
+
     const ret = toJS(this.responseAlbumsTracks.AlbumWorks);
     return ret.map(t => t.idTrack_DZ);
   }
@@ -684,10 +899,10 @@ class AlbumStore {
 */
 
   @action
-  playTracks(workOrd: number, initIndexTrack: number) {
+  playTracks(tracks: Array<number>, workOrd: number, initIndexTrack: number) {
     // this.tracks = tracks;
     //console.log(initIndexTrack);d
-    debugger;
+
     /*
     const offSet: number = this.responseAlbumsTracks.AlbumWorks.filter(
       a => a.idMC_ord < workOrd
@@ -696,7 +911,7 @@ class AlbumStore {
       .reduce((sum: number, curr: number) => sum + curr, 0);
 */
     DZ.player.pause();
-    DZ.player.playTracks(this.tracks, initIndexTrack);
+    DZ.player.playTracks(tracks, initIndexTrack);
   }
 
   @action
@@ -722,21 +937,45 @@ class AlbumStore {
 
   @observable trackIdIsPlaying: number;
 
-  @observable activeTrackIsFavorite: boolean = false;
+  @computed get activeTrackIsFavorite(): boolean {
+    debugger;
+    return !!this.activeTrack?.trackFavorit;
+  }
 
-  @observable userId: string;
+  @observable idUser: number;
 
   @action
   toggleFavoriteTrack(idTrack: number) {
-    const URL = WEB_API_HOST + "api/TrackFavorite";
-    const data = { idTrack: idTrack, idUser: this.userId };
-    this.activeTrackIsFavorite = !this.activeTrackIsFavorite;
-    return axios.put(URL, data);
+    debugger;
+    const esFavorit: boolean = !this.activeTrackIsFavorite;
+    const URL = URL_WEB_API_DZK + "CORE_track_favBO";
+    const data = {
+      idTrack: idTrack,
+      idUser: 1111
+    };
+    debugger;
+
+    const config: AxiosRequestConfig = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    //this.activeTrack.trackFavorit = !this.activeTrack.trackFavorit;
+    return axios
+      .post(URL, JSON.stringify(data), config)
+      .then(fet => {
+        debugger ;this.activeTrack.trackFavorit = !!this.activeTrack.trackFavorit
+          ? null
+          : this.idUser;
+      })
+      .catch(fail => {
+        debugger;
+      });
   }
 
   @observable userid: string;
 
-  public secondsToTimeFormat(seconds: number): string {
+  public convertSecondsToTimeFormat(seconds: number): string {
     try {
       const ret = new Date(seconds * 1000).toISOString().substr(11, 8);
       return ret.startsWith("00:") ? ret.substr(3) : ret;
@@ -765,7 +1004,7 @@ class AlbumStore {
     this.playerChangeIndex(index);
     this.activeTrack = index;
 */
-    debugger;
+
     DZ.player.next();
   }
 
@@ -777,6 +1016,11 @@ class AlbumStore {
   }
 
   @observable playerIsPlaying: boolean = false;
+  /*
+  @computed get playerIsPlaying(): boolean {
+    return observable(DZ.player.isPlaying);
+  }
+*/
 
   /*
   @computed get allComposersAlbums(): Array<IAlbumComposer> {
@@ -834,7 +1078,10 @@ class AlbumStore {
   @observable activeGroupFieldValue: string = "";
 
   @computed get groupsRaw(): MethodMap<IAlbum[]> {
-    return this.albumsRaw.reduce(groupBy(t => t[this.groupByField]), Map());
+    return this.albumsRaw.reduce(
+      groupBy(t => t[this.groupByField]),
+      Map()
+    );
     //return _.groupBy<Array<IComposer>>(this.composers, (t) => {t.nacio}) as Array<IComposer>
   }
 
@@ -863,9 +1110,9 @@ class AlbumStore {
 
   @computed get numColumsAlbums(): number {
     if (!this.groupByField) {
-      return 4;
+      return 5;
     }
-    return 3;
+    return 4;
   }
 
   @computed get albumTags(): Array<ILinkTag> {
@@ -874,7 +1121,7 @@ class AlbumStore {
     }
     const genres = [
       ...new Set(
-        this.responseAlbumsTracks.AlbumWorks.map(item => item.workGenre)
+        (this.responseAlbumsTracks.AlbumWorks || []).map(item => item.workGenre)
       )
     ];
     const genresTag = genres.map(g => {
@@ -886,10 +1133,22 @@ class AlbumStore {
     ];
   }
 
+  @computed get responseAlbumsTracksAlbumWorksGrouped(): Array<IWorksView> {
+    if (
+      !this.responseAlbumsTracks ||
+      !this.responseAlbumsTracks.AlbumWorksGrouped
+    ) {
+      return [];
+    }
+    return this.responseAlbumsTracks.AlbumWorksGrouped;
+  }
+
   @action setDzSeek(value: number) {
     console.log(value);
     DZ.player.seek((value / this.activeTrackDuration) * 100);
   }
+
+  private composerStore: ComposerStore;
 }
 
 export default AlbumStore;

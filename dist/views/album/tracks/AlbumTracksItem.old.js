@@ -35,9 +35,7 @@ var MyPaper_1 = require("../../../widgets/MyPaper");
 var AlbumTracksItemOld = (function (_super) {
     __extends(AlbumTracksItemOld, _super);
     function AlbumTracksItemOld(props, context) {
-        var _this = this;
-        debugger;
-        _this = _super.call(this, props, context) || this;
+        var _this = _super.call(this, props, context) || this;
         _this.props.albumStore.setActiveAlbumById(Number(props.match.params.idAlbum));
         return _this;
     }
@@ -52,31 +50,10 @@ var AlbumTracksItemOld = (function (_super) {
                     top: 60,
                     verticalAlign: "center"
                 } },
-                React.createElement(CollectionNav_1.default, { isEnabledNext: this.props.albumStore.isNextable, isEnabledPrevious: this.props.albumStore.isPreviousable, onClickNext: function () { return _this.props.albumStore.goNext(); }, onClickPrevious: function () { return _this.props.albumStore.goPrevious(); } })),
-            React.createElement("div", { style: {
-                    position: "absolute",
-                    left: 0,
-                    top: 20
-                } },
-                React.createElement("h1", null,
-                    this.props.albumStore.responseAlbumsTracks &&
-                        this.props.albumStore.activeAlbum.nameMW,
-                    " ",
-                    React.createElement("a", { href: "http://www.deezer.com/es/album/" +
-                            this.props.albumStore.activeAlbumMWdeezerLink, target: "_blank" }, "dz"),
-                    " ",
-                    React.createElement("a", { href: "https://api.deezer.com/album/" +
-                            this.props.albumStore.activeAlbumMWdeezerLink, target: "_blank" }, "dzApi"),
-                    " ",
-                    React.createElement("a", { href: "sql://SELECT * FROM album WHERE idAlbum = " +
-                            this.props.albumStore.activeAlbum.idAlbum, target: "_blank" }, "SQL"),
-                    " ",
-                    React.createElement("a", { href: "http://www.allmusic.com/album/" +
-                            this.props.albumStore.activeAlbum.idMW, target: "_blank" }, this.props.albumStore.activeAlbum.idMW)))));
+                React.createElement(CollectionNav_1.default, { isEnabledNext: this.props.albumStore.isNextable, isEnabledPrevious: this.props.albumStore.isPreviousable, onClickNext: function () { return _this.props.albumStore.goNext(); }, onClickPrevious: function () { return _this.props.albumStore.goPrevious(); } }))));
         if (!this.props.albumStore.albumTracks) {
             return this.props.albumStore.activeAlbum.idMW;
         }
-        debugger;
         return (React.createElement("div", { style: {
                 position: "relative",
                 marginTop: 0

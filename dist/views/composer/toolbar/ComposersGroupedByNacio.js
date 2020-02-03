@@ -29,7 +29,7 @@ var ComposersGroupedByNacio = (function (_super) {
     }
     ComposersGroupedByNacio.prototype.render = function () {
         var _this = this;
-        return (this.props.composerStore.isGroupedByNation && (React.createElement(GroupedMenuCount_1.default, { data: this.props.composerStore.groupsNacio, activeItem: this.props.composerStore.activeGroupIdNacio, onChange: function (idMenu) {
+        return (this.props.composerStore.isGroupedByNation && (React.createElement(GroupedMenuCount_1.default, { data: this.props.composerStore.groupsNacioSorted, activeItem: this.props.composerStore.activeGroupIdNacio, onChange: function (idMenu) {
                 _this.props.composerStore.activeGroupIdNacio = idMenu;
             } })));
     };

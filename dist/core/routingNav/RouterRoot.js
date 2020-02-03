@@ -23,17 +23,18 @@ var React = require("react");
 var ComposerCollection_1 = require("../../views/composer/collection/ComposerCollection");
 var react_router_1 = require("react-router");
 var ComposerItem_1 = require("../../views/composer/ComposerItem");
+var react_transition_group_1 = require("react-transition-group");
 var constants_1 = require("../../util/constants");
 var AlbumCollection_1 = require("../../views/album/collection/AlbumCollection");
-var AlbumTracksItem_1 = require("../../views/album/tracks/AlbumTracksItem");
+var AlbumItemDetail_1 = require("../../views/album/tracks/AlbumItemDetail");
 var KlassikRank_1 = require("../../views/composerWork/klassikRank/KlassikRank");
 var PerformerRolsCollection_1 = require("../../views/performer/collection/PerformerRolsCollection");
 var Hero_1 = require("../../views/Hero");
 var PerformerCollection_1 = require("../../views/performer/collection/PerformerCollection");
 var mobx_react_1 = require("mobx-react");
-var PerformerAlbumCollection_1 = require("../../views/album/collection/PerformerAlbumCollection");
 var RandomTracks_1 = require("../../moduls/RandomTracks");
 var ResultSearch_1 = require("../search/ResultSearch");
+var PerformerItem_1 = require("../../views/performer/PerformerItem");
 var RouterRoot = (function (_super) {
     __extends(RouterRoot, _super);
     function RouterRoot(props, context) {
@@ -43,20 +44,22 @@ var RouterRoot = (function (_super) {
         return _this;
     }
     RouterRoot.prototype.render = function () {
-        return (React.createElement(react_router_1.Switch, null,
-            React.createElement(react_router_1.Redirect, { from: "/menu", exact: true, to: constants_1.ROUTE_COMPOSERS_COLLECTION, push: true }),
-            React.createElement(react_router_1.Route, { path: "/", exact: true, component: Hero_1.default }),
-            React.createElement(react_router_1.Route, { path: "/menu", exact: true, component: ComposerCollection_1.default }),
-            React.createElement(react_router_1.Route, { path: constants_1.ROUTE_COMPOSERS_ITEM, exact: true, component: ComposerItem_1.default }),
-            React.createElement(react_router_1.Route, { path: constants_1.ROUTE_COMPOSERS_COLLECTION, exact: false, component: ComposerCollection_1.default }),
-            React.createElement(react_router_1.Route, { path: constants_1.ROUTE_ALBUMS_COLLECTION, exact: true, component: AlbumCollection_1.default }),
-            React.createElement(react_router_1.Route, { path: constants_1.ROUTE_ALBUM_TRACKS, exact: true, component: AlbumTracksItem_1.default }),
-            React.createElement(react_router_1.Route, { path: constants_1.ROUTE_WORK_VERSIONS, exact: true, component: KlassikRank_1.default }),
-            React.createElement(react_router_1.Route, { path: constants_1.ROUTE_PERFORMERSROL_COLLECTION, exact: true, component: PerformerRolsCollection_1.default }),
-            React.createElement(react_router_1.Route, { path: constants_1.ROUTE_PERFORMER_COLLECTION, exact: true, component: PerformerCollection_1.default }),
-            React.createElement(react_router_1.Route, { path: constants_1.ROUTE_PERFORMER_ALBUMS, exact: true, component: PerformerAlbumCollection_1.default }),
-            React.createElement(react_router_1.Route, { path: constants_1.ROUTE_RANDOM_TRACK, exact: true, component: RandomTracks_1.default }),
-            React.createElement(react_router_1.Route, { path: constants_1.ROUTE_SEARCH_RESULTS, exact: true, component: ResultSearch_1.default })));
+        var location = this.props.location;
+        return (React.createElement(react_transition_group_1.Transition, { timeout: 1000 },
+            React.createElement(react_router_1.Switch, { key: location.pathname },
+                React.createElement(react_router_1.Redirect, { from: "/menu", exact: true, to: constants_1.ROUTE_COMPOSERS_COLLECTION, push: true }),
+                React.createElement(react_router_1.Route, { path: "/", exact: true, component: Hero_1.default }),
+                React.createElement(react_router_1.Route, { path: "/menu", exact: true, component: ComposerCollection_1.default }),
+                React.createElement(react_router_1.Route, { path: constants_1.ROUTE_COMPOSER_ITEM, exact: true, component: ComposerItem_1.default }),
+                React.createElement(react_router_1.Route, { path: constants_1.ROUTE_COMPOSERS_COLLECTION, exact: false, component: ComposerCollection_1.default }),
+                React.createElement(react_router_1.Route, { path: constants_1.ROUTE_ALBUMS_COLLECTION, exact: true, component: AlbumCollection_1.default }),
+                React.createElement(react_router_1.Route, { path: constants_1.ROUTE_ALBUM_TRACKS, exact: false, component: AlbumItemDetail_1.default }),
+                React.createElement(react_router_1.Route, { path: constants_1.ROUTE_WORK_VERSIONS, exact: true, component: KlassikRank_1.default }),
+                React.createElement(react_router_1.Route, { path: constants_1.ROUTE_PERFORMERSROL_COLLECTION, exact: true, component: PerformerRolsCollection_1.default }),
+                React.createElement(react_router_1.Route, { path: constants_1.ROUTE_PERFORMER_COLLECTION, exact: true, component: PerformerCollection_1.default }),
+                React.createElement(react_router_1.Route, { path: constants_1.ROUTE_PERFORMER, exact: true, component: PerformerItem_1.default }),
+                React.createElement(react_router_1.Route, { path: constants_1.ROUTE_RANDOM_TRACK, exact: true, component: RandomTracks_1.default }),
+                React.createElement(react_router_1.Route, { path: constants_1.ROUTE_SEARCH_RESULTS, exact: true, component: ResultSearch_1.default }))));
     };
     RouterRoot = __decorate([
         mobx_react_1.inject("routerStore")

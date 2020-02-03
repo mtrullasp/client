@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 require("../playerBar.new.scss");
+var semantic_ui_react_1 = require("semantic-ui-react");
 var DZ = window.DZ;
 var DzNextButtonNew = (function (_super) {
     __extends(DzNextButtonNew, _super);
@@ -22,9 +23,7 @@ var DzNextButtonNew = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     DzNextButtonNew.prototype.render = function () {
-        return (React.createElement("button", { className: "button ff", onClick: function () { return DZ.player.next(); } },
-            React.createElement("div", { className: "arrow" }),
-            React.createElement("div", { className: "arrow" })));
+        return (React.createElement(semantic_ui_react_1.Icon, { style: { color: "white", width: 50, cursor: "pointer" }, size: "large", className: "step forward", onClick: function () { return DZ.player.next(); } }));
     };
     return DzNextButtonNew;
 }(React.Component));

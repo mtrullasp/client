@@ -25,7 +25,7 @@ var MyCollection = (function (_super) {
         var xsRight = !!this.props.asideLeftContent ? 14 : 16;
         return (React.createElement(semantic_ui_react_1.Grid, { columns: 16, relaxed: "very" },
             React.createElement(semantic_ui_react_1.Grid.Row, { columns: 16 },
-                React.createElement(semantic_ui_react_1.Grid.Column, { width: 16, style: { marginTop: 5 } }, this.props.headerContent)),
+                React.createElement(semantic_ui_react_1.Grid.Column, { width: 16, style: { marginTop: 0 } }, this.props.headerContent)),
             React.createElement(semantic_ui_react_1.Grid.Row, { columns: 16 },
                 !!xsLeft &&
                     React.createElement(semantic_ui_react_1.Grid.Column, { width: xsLeft }, this.props.asideLeftContent),

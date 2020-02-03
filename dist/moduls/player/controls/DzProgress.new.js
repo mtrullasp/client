@@ -33,7 +33,7 @@ var DzProgressNew = (function (_super) {
         return (React.createElement("div", { className: "info pr", style: {
                 display: "inline-flex",
                 position: "relative",
-                top: 20,
+                top: 10,
                 width: "100%"
             } },
             React.createElement("div", { className: "time", style: { display: "inline-flex", width: "100%" } },

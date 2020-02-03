@@ -12,6 +12,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -20,13 +31,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var Icon = require("react-feather");
 var mobx_react_1 = require("mobx-react");
 var constants_1 = require("../../util/constants");
 var togglePlayer_1 = require("./togglePlayer");
 var DzFlowList_1 = require("./controls/DzFlowList");
 require("./playerBar.new.scss");
 var TextFit_1 = require("../../widgets/TextFit/TextFit");
+var semantic_ui_react_1 = require("semantic-ui-react");
+var IconFeather = require("react-feather");
+var ActiveCredits_1 = require("../../views/album/tracks/ActiveCredits");
 var DZ = window.DZ;
 var TrackListPlayerDFlow = (function (_super) {
     __extends(TrackListPlayerDFlow, _super);
@@ -71,8 +84,11 @@ var FavBtn = (function (_super) {
     }
     FavBtn.prototype.render = function () {
         var _this = this;
-        return (React.createElement(Icon.Heart, { style: this.props.albumStore.activeTrackIsFavorite ? { fill: "black" } : {}, className: "player-button", onClick: function () {
-                return _this.props.albumStore.toggleFavoriteTrack(_this.props.albumStore.activeTrack.idDeezerTrack);
+        return (React.createElement(IconFeather.Heart, { style: __assign(__assign(__assign({}, this.props.style), { color: "white", marginTop: 5 }), (this.props.albumStore.activeTrackIsFavorite
+                ? { fill: "white" }
+                : {})), onClick: function () {
+                var _a;
+                return _this.props.albumStore.toggleFavoriteTrack((_a = _this.props.albumStore.activeTrack) === null || _a === void 0 ? void 0 : _a.idTrack_DZ);
             } }));
     };
     FavBtn = __decorate([
@@ -95,8 +111,8 @@ var VersionsBtn = (function (_super) {
             return null;
         }
         return (!!this.props.albumStore.activeTrack &&
-            !!this.props.albumStore.activeTrack.idWork && (React.createElement(Icon.Music, { className: "player-button", onClick: function () {
-                var activeIdWork = _this.props.albumStore.activeTrack.idWork;
+            !!this.props.albumStore.activeTrack.idMC && (React.createElement(IconFeather.Music, { className: "player-button", onClick: function () {
+                var activeIdWork = _this.props.albumStore.activeTrack.idMC;
                 var path = constants_1.ROUTE_KLASSIC_RANK.replace(":idMC", activeIdWork.toString()).replace(":numPart", "");
                 _this.props.routerStore.go(path);
             } })));
@@ -117,16 +133,13 @@ var InfoWorkSuperior = (function (_super) {
     }
     InfoWorkSuperior.prototype.render = function () {
         var activeTrack = this.props.albumStore.activeTrack;
-        debugger;
         if (!activeTrack) {
             return "null";
         }
         return (React.createElement("div", null,
             React.createElement(TextFit_1.default, { text: this.props.albumStore.activeTrackComposer +
                     ": " +
-                    this.props.albumStore.activeTrackWorkName +
-                    " " +
-                    activeTrack.title, maxFontSize: 20 })));
+                    this.props.albumStore.activeTrackWorkName, maxFontSize: 18 })));
     };
     InfoWorkSuperior = __decorate([
         mobx_react_1.inject("albumStore"),
@@ -141,11 +154,13 @@ var InfoWorkInferior = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     InfoWorkInferior.prototype.render = function () {
+        var _a;
         var activeTrack = this.props.albumStore.activeTrack;
         if (!activeTrack) {
             return null;
         }
-        return React.createElement("div", null, "activeTrack.credits");
+        return (React.createElement("div", null,
+            React.createElement(ActiveCredits_1.default, { credits: (_a = this.props.albumStore) === null || _a === void 0 ? void 0 : _a.activeTrackPrimaryCredits })));
     };
     InfoWorkInferior = __decorate([
         mobx_react_1.inject("albumStore"),
@@ -173,7 +188,7 @@ var DzPlayBtn = (function (_super) {
         });
     };
     DzPlayBtn.prototype.render = function () {
-        var button = this.state.isPlaying ? (React.createElement(Icon.PauseCircle, { className: "play-button", onClick: function () { return togglePlayer_1.default(); } })) : (React.createElement(Icon.PlayCircle, { className: "play-button", onClick: function () { return togglePlayer_1.default(); } }));
+        var button = this.state.isPlaying ? (React.createElement(semantic_ui_react_1.Icon, { className: "pause", onClick: function () { return togglePlayer_1.default(); } })) : (React.createElement(semantic_ui_react_1.Icon, { className: "play", onClick: function () { return togglePlayer_1.default(); } }));
         return React.createElement("div", null, button);
     };
     return DzPlayBtn;
@@ -183,23 +198,26 @@ var DzPlayBtnNew = (function (_super) {
     __extends(DzPlayBtnNew, _super);
     function DzPlayBtnNew(props) {
         var _this = _super.call(this, props) || this;
-        _this.state = {
-            isPlaying: false
-        };
-        return _this;
-    }
-    DzPlayBtnNew.prototype.componentDidMount = function () {
-        var that = this;
+        var that = _this;
         window.DZ.Event.subscribe("player_play", function () {
             that.setState({ isPlaying: true });
         });
         window.DZ.Event.subscribe("player_paused", function () {
             that.setState({ isPlaying: false });
         });
-    };
+        _this.state = {
+            isPlaying: false
+        };
+        return _this;
+    }
     DzPlayBtnNew.prototype.render = function () {
-        return (React.createElement("button", { className: "button play-pause", onClick: function () { return togglePlayer_1.default(); } },
-            React.createElement("div", { className: "arrow" })));
+        var className = this.state.isPlaying ? "pause" : "play";
+        return (React.createElement(semantic_ui_react_1.Icon, { style: {
+                color: "white",
+                width: 20,
+                cursor: "pointer",
+                textAlign: "middle"
+            }, size: "big", className: className, onClick: function () { return togglePlayer_1.default(); } }));
     };
     return DzPlayBtnNew;
 }(React.Component));

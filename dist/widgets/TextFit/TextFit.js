@@ -22,6 +22,6 @@ function TextFit(props) {
         return null;
     }
     var fontSize = getFontSize(props.text, props.maxFontSize);
-    return (React.createElement("div", { style: __assign({}, (props.style || {}), { fontSize: fontSize, width: "100%", lineHeight: fontSize + "px" }) }, props.text));
+    return (React.createElement("div", { style: __assign(__assign({}, (props.style || {})), { fontSize: fontSize, width: "100%", lineHeight: fontSize + "px" }) }, props.text));
 }
 exports.default = TextFit;

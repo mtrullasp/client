@@ -24,11 +24,14 @@ var mobx_react_1 = require("mobx-react");
 var SearchInput_1 = require("./core/search/SearchInput");
 var react_router_dom_1 = require("react-router-dom");
 var semantic_ui_react_1 = require("semantic-ui-react");
+var MySlider_1 = require("./widgets/MySlider");
 var constants_1 = require("./util/constants");
+var Icon = require("react-feather");
 var Button3d_1 = require("./widgets/3dbutton/Button3d");
 exports.HORITZONTAL_MARGIN = 100;
 exports.TOP_NAME = 0;
 exports.ABSOLUTE_MARGIN = 10;
+var MARGE_LEFT = constants_1.MARGIN_HORITZONTAL + 0;
 var Header = (function (_super) {
     __extends(Header, _super);
     function Header(props, context) {
@@ -56,28 +59,53 @@ var Header = (function (_super) {
                         display: "inline",
                         position: "absolute",
                         top: 0,
-                        left: 0
+                        left: -100
                     } },
-                    React.createElement(Button3d_1.default, { text: "Composers", buttonHeight: 20, onClick: function () {
+                    React.createElement(Button3d_1.default, { isIcon: true, childStyle: { padding: 0, width: 40, margin: 0 }, text: "arrow left", buttonHeight: 20, onClick: function () {
+                            _this.props.history.goBack();
+                        }, top: 0, left: 5 }),
+                    React.createElement(Button3d_1.default, { isIcon: true, text: "home", buttonHeight: 20, onClick: function () {
+                            _this.props.history.push(constants_1.ROUTE_HOME);
+                        }, top: 0, left: 40 }),
+                    React.createElement(Button3d_1.default, { isIcon: false, text: "Composers", buttonHeight: 20, onClick: function () {
                             _this.props.history.push(constants_1.ROUTE_COMPOSERS_COLLECTION);
-                        }, top: 0, left: 60 }),
-                    React.createElement(Button3d_1.default, { text: "Performers", buttonHeight: 20, onClick: function () {
+                        }, top: 0, left: MARGE_LEFT - 18 }),
+                    React.createElement(Button3d_1.default, { isIcon: false, text: "Performers", buttonHeight: 20, onClick: function () {
                             _this.props.history.push(constants_1.ROUTE_PERFORMERSROL_COLLECTION);
-                        }, top: 0, left: 220 })),
+                        }, top: 0, left: MARGE_LEFT + 100 }),
+                    React.createElement(Button3d_1.default, { isIcon: false, text: "My.Collection", buttonHeight: 20, onClick: function () {
+                            _this.props.history.push(constants_1.ROUTE_PERFORMERSROL_COLLECTION);
+                        }, top: 0, left: MARGE_LEFT + 280 }),
+                    React.createElement(Button3d_1.default, { isIcon: false, text: "Playlists", buttonHeight: 20, onClick: function () {
+                            _this.props.history.push(constants_1.ROUTE_PERFORMERSROL_COLLECTION);
+                        }, top: 0, left: MARGE_LEFT + 420 })),
                 React.createElement("div", { style: {
                         display: "inline",
                         position: "absolute",
                         top: 0,
-                        left: 470
+                        left: MARGE_LEFT + 430
                     } },
-                    React.createElement(Button3d_1.default, { text: "Random", buttonHeight: 20, onClick: function () {
-                            _this.props.history.push(constants_1.ROUTE_RANDOM_TRACK);
+                    React.createElement(Button3d_1.default, { isIcon: false, text: "Random", buttonHeight: 20, onClick: function () {
+                            _this.props.albumStore.clickRandom();
                         }, top: 0, left: 0 })),
                 React.createElement("div", { style: {
                         display: "inline",
-                        width: 350,
                         position: "absolute",
-                        right: 50
+                        top: 0,
+                        left: MARGE_LEFT + 550,
+                        width: 150
+                    } },
+                    React.createElement("span", null,
+                        React.createElement("b", null, this.props.composerStore.RANDOM_NUM_COMPOSERS)),
+                    " Composers",
+                    React.createElement(MySlider_1.default, { style: { width: "100%" }, thumb: React.createElement(Icon.Circle, { className: "progress-circle" }), value: this.props.composerStore.RANDOM_NUM_COMPOSERS.toString(), max: 320, onChange: function (value) {
+                            _this.props.composerStore.RANDOM_NUM_COMPOSERS = value.toString();
+                        } })),
+                React.createElement("div", { style: {
+                        display: "inline",
+                        width: 350,
+                        position: "fixed",
+                        right: 160
                     } },
                     React.createElement(SearchInput_1.default, null),
                     " ")),

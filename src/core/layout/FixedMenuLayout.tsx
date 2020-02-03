@@ -20,7 +20,7 @@ class FixedMenuLayout extends React.Component<IProps, {}> {
   render() {
     return (
       <div>
-        <div style={{ minHeight: 40 }}>{this.props.headerContent}</div>
+        <div style={{ minHeight: 50 }}>{this.props.headerContent}</div>
         <div
           style={{
             position: "relative",

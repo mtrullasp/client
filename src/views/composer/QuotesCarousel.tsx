@@ -7,7 +7,7 @@ import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
 import ComposerStore from "../../core/stores/ComposerStore";
 import TextFit from "../../widgets/TextFit/TextFit";
-import { SECOND_ACCENT_COLOR, URL_WEB_API } from "../../util/constants";
+import { TRUE_ACCENT_COLOR, URL_WEB_API } from "../../util/constants";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -52,7 +52,7 @@ class QuotesCarousel extends React.Component<IProps, IState> {
               fontSize: 14,
               fontWeight: 700,
               height: 25,
-              color: SECOND_ACCENT_COLOR
+              color: TRUE_ACCENT_COLOR
             }}
           >
             — {q.contentSourceName.trimRight()}

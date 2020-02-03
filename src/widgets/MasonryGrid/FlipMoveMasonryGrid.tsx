@@ -84,7 +84,6 @@ class FlipMoveMasonryGrid extends React.Component<IProps, {}> {
             this.props.gutter * this.props.numColumns + MARGIN_HORITZONTAL;
 
           return (
-            <div style={{...this.props.style }}>
               <Flipper flipKey={this.props.items} spring={"stiff"}>
                 {(isFunction(this.props.items)
                   ? this.props.items(
@@ -104,15 +103,6 @@ class FlipMoveMasonryGrid extends React.Component<IProps, {}> {
                   </Flipped>
                 ))}
               </Flipper>
-              {/*
-
-            {this.props.items(width / this.props.numColumns,
-              height / this.props.numColumns
-            ).map((i => {
-              return <FlipMove>{i}</FlipMove>;
-            })}
-*/}
-            </div>
           );
         }}
       </ContainerDimensions>

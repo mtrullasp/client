@@ -17,20 +17,9 @@ class PerformerAlbumCollection extends React.Component<IProps, {}> {
   }
 
   render() {
-    const titleBar = (
-      <h1>
-        {this.props.albumStore.activeArtistNameMN}.{" "}
-        <span style={{ fontWeight: 200 }}>Discography</span>
-      </h1>
-    );
     return (
       <div>
-        <div>
-          <TitleBar content={titleBar} />
-        </div>
-        <div>
-          <AlbumCollection />
-        </div>
+        <AlbumCollection />
       </div>
     );
   }

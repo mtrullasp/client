@@ -39,6 +39,13 @@ var RouterStore = (function () {
     RouterStore.prototype.goBack = function () {
         this.history.goBack();
     };
+    Object.defineProperty(RouterStore.prototype, "isRandom", {
+        get: function () {
+            return this.activeRouterPath.endsWith("random");
+        },
+        enumerable: true,
+        configurable: true
+    });
     __decorate([
         mobx_1.action
     ], RouterStore.prototype, "setHistory", null);
@@ -60,6 +67,9 @@ var RouterStore = (function () {
     __decorate([
         mobx_1.observable
     ], RouterStore.prototype, "activeRouterPath", void 0);
+    __decorate([
+        mobx_1.computed
+    ], RouterStore.prototype, "isRandom", null);
     return RouterStore;
 }());
 exports.RouterStore = RouterStore;

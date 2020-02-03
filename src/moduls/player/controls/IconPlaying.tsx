@@ -1,6 +1,6 @@
 import * as React from "react";
 import "./iconPlaying.css";
-import { SECOND_ACCENT_COLOR } from "../../../util/constants";
+import { TRUE_ACCENT_COLOR } from "../../../util/constants";
 
 interface IProps {}
 export default class IconPlaying extends React.Component<IProps, {}> {
@@ -19,7 +19,7 @@ export default class IconPlaying extends React.Component<IProps, {}> {
         xmlnsXlink="http://www.w3.org/1999/xlink"
       >
         <defs />
-        <g id="icon-equalizer-anim" fill={SECOND_ACCENT_COLOR}>
+        <g id="icon-equalizer-anim" fill={TRUE_ACCENT_COLOR}>
           <rect className="eq__bar" id="eq1" x={1} y={8} width={4} height={8} />
           <rect
             className="eq__bar"

@@ -24,12 +24,13 @@ import "./styles/TrackListPlayerDFlow.less";
 import { DzPlayBtn } from "./TrackListPlayerDFlow";
 import PlayerBar from "./PlayerBar";
 import paleta from "../../styles/paleta";
+import AlbumStore from "../../core/stores/AlbumStore";
 // import ArtistsCreditsLinker from "./ArtistsCreditsLinker";
 const FOOTER_HEIGHT = 60;
 const POSITION_NEXT_PREV = 50;
 
 interface IProps {
-  playerStore?: PlayerStore;
+  albumStore?: AlbumStore;
 }
 @inject("albumStore")
 @observer
@@ -174,7 +175,7 @@ class Player extends React.Component<IProps, {}> {
               opacity: 0.6
             }}
           >
-            <PlayerBar />
+            <PlayerBar  />
           </footer>
         </div>
         {/*

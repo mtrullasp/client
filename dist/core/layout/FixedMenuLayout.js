@@ -22,7 +22,7 @@ var FixedMenuLayout = (function (_super) {
     }
     FixedMenuLayout.prototype.render = function () {
         return (React.createElement("div", null,
-            React.createElement("div", { style: { minHeight: 40 } }, this.props.headerContent),
+            React.createElement("div", { style: { minHeight: 50 } }, this.props.headerContent),
             React.createElement("div", { style: {
                     position: "relative",
                     marginRight: 0,

@@ -17,9 +17,9 @@ var SearchStore_1 = require("./core/stores/SearchStore");
 var history = History_1.createBrowserHistory();
 var routerStore = new RouterStore_1.RouterStore();
 var geoStore = new GeoStore_1.default();
-var composerStore = new ComposerStore_1.default(geoStore, routerStore);
 var performerStore = new PerformerStore_1.PerformerStore();
-var albumStore = new AlbumStore_1.default(performerStore, routerStore);
+var composerStore = new ComposerStore_1.default(geoStore, routerStore, performerStore);
+var albumStore = new AlbumStore_1.default(composerStore, performerStore, routerStore);
 var searchStore = new SearchStore_1.default(routerStore);
 require("@blueprintjs/core/lib/css/blueprint.css");
 var Group = (function () {
@@ -38,10 +38,10 @@ ReactDOM.render(React.createElement(mobx_react_1.Provider, { composerStore: comp
             display: "flex",
             flexFlow: "column nowrap",
             backgroundRepeat: "no-repeat",
-            backgroundColor: "#F5F5F5",
+            backgroundColor: "#f8f8f8",
             backgroundSize: "cover",
             backgroundOrigin: "border-box"
-        } },
+        }, className: "gradient-main" },
         React.createElement(react_router_dom_1.Router, { history: history },
             React.createElement("div", null,
                 React.createElement(FixedMenuLayout_1.default, { headerContent: React.createElement(Header_1.default, null), bodyContent: React.createElement(RouterRoot_1.default, null) }))))), document.getElementById("root"));

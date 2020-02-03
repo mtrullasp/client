@@ -17,7 +17,7 @@ class ComposersGroupedByNacio extends React.Component<IProps, {}> {
     return (
       this.props.composerStore.isGroupedByNation && (
         <GroupedMenuCount
-          data={this.props.composerStore.groupsNacio}
+          data={this.props.composerStore.groupsNacioSorted}
           activeItem={this.props.composerStore.activeGroupIdNacio}
           onChange={idMenu => {
             this.props.composerStore.activeGroupIdNacio = idMenu;

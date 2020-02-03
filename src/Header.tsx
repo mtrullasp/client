@@ -18,6 +18,7 @@ import {
   Menu,
   MenuItemProps
 } from "semantic-ui-react";
+import MySlider from "./widgets/MySlider";
 // import { Store } from "@material-ui/icons";
 import AlbumStore from "./core/stores/AlbumStore";
 import ComposersWorksPerformers from "./views/header/ComposersWorksPerformers";
@@ -25,6 +26,7 @@ import { RouterStore } from "./core/stores/RouterStore";
 import {
   MARGIN_HORITZONTAL,
   ROUTE_COMPOSERS_COLLECTION,
+  ROUTE_HOME,
   ROUTE_PERFORMERSROL_COLLECTION,
   ROUTE_RANDOM_TRACK
 } from "./util/constants";
@@ -37,6 +39,8 @@ import Button3d from "./widgets/3dbutton/Button3d";
 export const HORITZONTAL_MARGIN = 100;
 export const TOP_NAME = 0;
 export const ABSOLUTE_MARGIN = 10;
+
+const MARGE_LEFT = MARGIN_HORITZONTAL + 0;
 
 interface IState {
   fets: boolean;
@@ -71,33 +75,6 @@ class Header extends React.Component<IProps, {}> {
     const composer = this.props.composerStore.activeComposer;
     headerContent = (
       <div style={{ backgroundColor: "whitesmoke" }}>
-{/*
-        <div
-          style={{
-            zIndex: 10000,
-            position: "relative",
-            top: 0,
-            left: 0,
-            width: 40,
-            height: 50
-          }}
-        >
-          {this.props.routerStore.canGoBack ? (
-            <Icon.ArrowLeft
-              size={"big"}
-              className={style({ cursor: "pointer" })}
-              onClick={() => this.props.routerStore.goBack()}
-            />
-          ) : (
-            <FavIcon
-              style={{ top: 4, left: 4, position: "relative" }}
-              onClick={() => {
-                this.props.history.goBack();
-              }}
-            />
-          )}
-        </div>
-*/}
         <div
           style={{
             zIndex: 10000,
@@ -112,28 +89,72 @@ class Header extends React.Component<IProps, {}> {
               display: "inline",
               position: "absolute",
               top: 0,
-              left: 0
+              left: -100
             }}
           >
             <Button3d
+              isIcon={true}
+              childStyle={{ padding: 0, width: 40, margin: 0 }}
+              text={"arrow left"}
+              buttonHeight={20}
+              onClick={() => {
+                this.props.history.goBack();
+              }}
+              top={0}
+              left={5}
+            />
+            <Button3d
+              isIcon={true}
+              text={"home"}
+              buttonHeight={20}
+              onClick={() => {
+                this.props.history.push(ROUTE_HOME);
+              }}
+              top={0}
+              left={40}
+            />
+            <Button3d
+              isIcon={false}
               text={"Composers"}
               buttonHeight={20}
               onClick={() => {
                 this.props.history.push(ROUTE_COMPOSERS_COLLECTION);
               }}
               top={0}
-              left={60}
+              left={MARGE_LEFT - 18}
             />
             <Button3d
+              isIcon={false}
               text={"Performers"}
               buttonHeight={20}
               onClick={() => {
                 this.props.history.push(ROUTE_PERFORMERSROL_COLLECTION);
               }}
               top={0}
-              left={220}
+              left={MARGE_LEFT + 100}
             />
-{/*
+            <Button3d
+              isIcon={false}
+              text={"My.Collection"}
+              buttonHeight={20}
+              onClick={() => {
+                this.props.history.push(ROUTE_PERFORMERSROL_COLLECTION);
+              }}
+              top={0}
+              left={MARGE_LEFT + 280}
+            />
+            <Button3d
+              isIcon={false}
+              text={"Playlists"}
+              buttonHeight={20}
+              onClick={() => {
+                this.props.history.push(ROUTE_PERFORMERSROL_COLLECTION);
+              }}
+              top={0}
+              left={MARGE_LEFT + 420}
+            />
+
+            {/*
             <ComposersWorksPerformers
               activeIndex={this.props.routerStore.menuIndex}
               onItemClick={(e: any, data: MenuItemProps) => {
@@ -149,7 +170,7 @@ class Header extends React.Component<IProps, {}> {
             />{" "}
 */}
           </div>
-{/*
+          {/*
           <div
             style={{
               display: "inline",
@@ -171,21 +192,23 @@ class Header extends React.Component<IProps, {}> {
               display: "inline",
               position: "absolute",
               top: 0,
-              left: 470
+              left: MARGE_LEFT + 430
             }}
           >
             <Button3d
+              isIcon={false}
               text={"Random"}
               buttonHeight={20}
               onClick={() => {
-                this.props.history.push(ROUTE_RANDOM_TRACK);
+                //this.props.albumStore.getRandomTrack();
+                this.props.albumStore.clickRandom();
               }}
               top={0}
               left={0}
             />
           </div>
 
-{/*
+          {/*
           <div
             style={{
               display: "inline",
@@ -197,13 +220,32 @@ class Header extends React.Component<IProps, {}> {
             <Menu size="tiny" compact={true} items={["Guided Tour"]} />{" "}
           </div>
 */}
-
+          <div
+            style={{
+              display: "inline",
+              position: "absolute",
+              top: 0,
+              left: MARGE_LEFT + 550,
+              width: 150
+            }}
+          >
+            <span><b>{this.props.composerStore.RANDOM_NUM_COMPOSERS}</b></span> Composers
+            <MySlider
+              style={{width: "100%"}}
+              thumb={<Icon.Circle className="progress-circle" />}
+              value={this.props.composerStore.RANDOM_NUM_COMPOSERS.toString()}
+              max={320}
+              onChange={(value: number) => {
+                this.props.composerStore.RANDOM_NUM_COMPOSERS = value.toString();
+              }}
+            />
+          </div>
           <div
             style={{
               display: "inline",
               width: 350,
-              position: "absolute",
-              right: 50
+              position: "fixed",
+              right: 160
             }}
           >
             <SearchInput />{" "}

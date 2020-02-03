@@ -26,7 +26,7 @@ var react_flexbox_grid_1 = require("react-flexbox-grid");
 var typestyle_1 = require("typestyle");
 var paleta_1 = require("../../../styles/paleta");
 var MaxHeightContainer_1 = require("../../../widgets/MaxHeightContainer");
-var MasonryGrid_1 = require("../../../widgets/MasonryGrid/MasonryGrid");
+var ReactGallery_1 = require("../../../widgets/MasonryGrid/ReactGallery");
 var PerformerRolsCollection = (function (_super) {
     __extends(PerformerRolsCollection, _super);
     function PerformerRolsCollection(props, context) {
@@ -44,7 +44,7 @@ var PerformerRolsCollection = (function (_super) {
                 var contentBase = function (opacity) {
                     return (React.createElement("div", { key: pr.IdRol },
                         React.createElement("img", { src: "http://127.0.1.0/PictureArtist/" + pr.UrlImage, alt: pr.NameRol, style: {
-                                height: width,
+                                height: height,
                                 width: width,
                                 opacity: _this.state.indexHover === index ? opacity + 0.4 : opacity
                             } }),
@@ -99,7 +99,9 @@ var PerformerRolsCollection = (function (_super) {
                 src: src,
                 thumbnail: "http://127.0.1.0/PictureArtist/" + performer.UrlImage,
                 performer: performer,
-                tags: [{ value: performer.NameRol, title: "" }]
+                tags: [{ value: performer.NameRol, title: "" }],
+                thumbnailWidth: performer.WidthImage,
+                thumbnailHeight: performer.HeightImage
             };
         });
         return (items && (React.createElement(MaxHeightContainer_1.default, { style: {
@@ -110,11 +112,14 @@ var PerformerRolsCollection = (function (_super) {
                 bottom: 0,
                 overflowY: "auto"
             }, footerHeight: 30 },
-            React.createElement("div", { style: { marginRight: constants_1.MARGIN_HORITZONTAL / 2, overflowY: "auto" } },
+            React.createElement("div", { style: {
+                    marginRight: constants_1.MARGIN_HORITZONTAL,
+                    overflowY: "auto"
+                } },
                 React.createElement("div", { style: { position: "relative", top: 5 } }),
-                React.createElement(MasonryGrid_1.default, { onClickThumbnail: function (item) {
+                React.createElement(ReactGallery_1.default, { onClickThumbnail: function (item) {
                         _this.props.history.push(constants_1.ROUTE_PERFORMER_COLLECTION.replace(":idRol", item.performer.IdRol.toString()));
-                    }, gutter: 5, gridEngine: "react-masonry-component", numColumns: constants_1.COMPOSER_NUMBER_COLS, items: images })))));
+                    }, gutter: 5, gridEngine: "react-masonry-component", numColumns: constants_1.COMPOSER_NUMBER_COLS, items: images, images: images })))));
     };
     PerformerRolsCollection = __decorate([
         mobx_react_1.inject("performerStore"),

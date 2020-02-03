@@ -1,4 +1,4 @@
-import { IAlbum, IAlbumCredit, ITrackAlbum, ITrackRoot, ITracksView, ITrackTrack } from "../AlbumStore";
+import { IAlbum, IAlbumCredit, ITrackAlbum, ITrackRoot, ITracksView, ITrackTrack, IWorksView } from "../AlbumStore";
 
 export interface ArtistMN {
   work: any[];
@@ -74,8 +74,10 @@ export interface IResponseAlbumTracksRoot {
   // Tracks: Array<ITracksView>;
   // AlbumWorks: Array<AlbumWork>;
   AlbumWorks: Array<ITracksView>;
+  AlbumWorksGrouped: Array<IWorksView>;
   AlbumCredits: Array<IAlbumCredit>;
   Album: IAlbum;
   Track: Track;
+  ActiveIdTrack: number;
 }
 

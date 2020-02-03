@@ -38,7 +38,7 @@ var styles = styles_1.createStyles({
         height: 2
     },
     trackBefore: {
-        backgroundColor: constants_1.SECOND_ACCENT_COLOR
+        backgroundColor: constants_1.TRUE_ACCENT_COLOR
     },
     circle: {
         height: 40

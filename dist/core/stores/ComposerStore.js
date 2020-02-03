@@ -20,31 +20,35 @@ var TGroupedMenuCount = (function () {
 }());
 exports.TGroupedMenuCount = TGroupedMenuCount;
 var ComposerStore = (function () {
-    function ComposerStore(geoStore, routerStore) {
+    function ComposerStore(geoStore, routerStore, performerStore) {
         var _this = this;
         this.activeIndex = 0;
         this.composerNameFilter = null;
         this.composersRaw = [];
         this.activeComposerQuotes = [];
         this.worksFilter = "";
+        this.sortComposerWorksKey = "performancesCount";
+        this.sortComposerWorksKeyDir = constants_1.SORT_ASCENDING;
         this.orderByKey = "ranking";
         this.orderByDir = 1;
-        this.activeGroupIdNacio = 0;
+        this.activeGroupIdNacio = "";
         this.isGroupedByNation = false;
         this.indexHover = -1;
+        this.RANDOM_NUM_COMPOSERS = "80";
         this.geoStore = geoStore;
         this.routerStore = routerStore;
-        axios_1.default.get(constants_1.URL_WEB_API + "Composers").then(function (resp) {
-            _this.composersRaw = resp.data.splice(0, constants_1.LIMIT_COMPOSERS);
+        this.performerStore = performerStore;
+        axios_1.default.get(constants_1.URL_WEB_API_DZK + "Composers").then(function (resp) {
+            _this.composersRaw = resp.data;
         });
         var that = this;
         window.addEventListener("keydown", function (event) {
+            var fer = function (callback) {
+                event.stopPropagation();
+                event.preventDefault();
+                callback();
+            };
             if (routerStore.activeRouterPath.includes("composers/collection")) {
-                var fer = function (callback) {
-                    event.stopPropagation();
-                    event.preventDefault();
-                    callback();
-                };
                 if (event.key === "ArrowRight") {
                     fer(function () { return indexHoverAdd(1); });
                 }
@@ -60,8 +64,12 @@ var ComposerStore = (function () {
                 if (event.key === "Enter") {
                     fer(function () {
                         that.activeIndex = that.indexHover;
-                        that.routerStore.go(constants_1.ROUTE_COMPOSERS_ITEM);
+                        that.routerStore.go(constants_1.ROUTE_COMPOSER_ITEM);
                     });
+                }
+            }
+            if (routerStore.activeRouterPath.includes("composers/item")) {
+                if (event.key === "ArrowRight") {
                 }
             }
         });
@@ -72,12 +80,19 @@ var ComposerStore = (function () {
             }
         };
         mobx_1.reaction(function () { return _this.activeComposer; }, function (composer) {
+            debugger;
             _this.worksFilter = "";
             if (!composer || _this.activeIndex === -1) {
                 return;
             }
+            _this.activeComposerQuotes = [
+                {
+                    content: "",
+                    contentSourceName: ""
+                }
+            ];
             _this.activeComposerQuotes = [];
-            var URL_COMPOSER_QUOTES = constants_1.URL_WEB_API +
+            var URL_COMPOSER_QUOTES = constants_1.URL_WEB_API_DZK +
                 "ComposerQuotes?idComposer=" +
                 composer.IdComposer.toString();
             axios_1.default.get(URL_COMPOSER_QUOTES).then(function (resp) {
@@ -95,8 +110,17 @@ var ComposerStore = (function () {
                 .then(function (resp) {
                 _this.activeComposerWorksWebApi = resp.data;
             });
+            _this.composerRels = [];
+            var URL_COMPOSER_RELS = constants_1.URL_WEB_API_DZK + "ArtistRelations?idMN=" + composer.idMN;
+            axios_1.default.get(URL_COMPOSER_RELS).then(function (resp) {
+                debugger;
+                _this.composerRels = resp.data;
+            });
         });
     }
+    ComposerStore.prototype.setActiveComposerId = function (id) {
+        this.activeIndex = this.composersRaw.findIndex(function (p) { return p.idMN === id; });
+    };
     ComposerStore.prototype.getCognomComposer = function (sortName) {
         var pos = sortName.indexOf(",");
         if (pos <= 0) {
@@ -139,15 +163,13 @@ var ComposerStore = (function () {
     });
     Object.defineProperty(ComposerStore.prototype, "activeComposerImgUrl", {
         get: function () {
-            return ("http://MOISES-PC/PictureHeaderBio/" +
-                ts_optchain_1.oc(this.activeComposer).IdComposer(-1) +
-                ".jpg");
+            return (constants_1.PATH_COMPOSER_IMAGE + ts_optchain_1.oc(this.activeComposer).IdComposer(-1) + ".jpg");
         },
         enumerable: true,
         configurable: true
     });
     ComposerStore.prototype.getComposerPicture = function (idComposer) {
-        return "http://MOISES-PC/PictureHeaderBio/" + idComposer + ".jpg";
+        return constants_1.PATH_COMPOSER_IMAGE + idComposer + ".jpg";
     };
     Object.defineProperty(ComposerStore.prototype, "activeComposerInfoNeixDefu", {
         get: function () {
@@ -156,10 +178,17 @@ var ComposerStore = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(ComposerStore.prototype, "composersRawNumFiltered", {
+        get: function () {
+            return this.composersRaw.slice(0, Number(this.RANDOM_NUM_COMPOSERS));
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(ComposerStore.prototype, "composers", {
         get: function () {
             var _this = this;
-            return this.composersRaw
+            return this.composersRawNumFiltered
                 .filter(function (composer) {
                 if (!_this.composerNameFilter) {
                     return true;
@@ -169,11 +198,10 @@ var ComposerStore = (function () {
                     .includes(_this.composerNameFilter.toLowerCase());
             }, this)
                 .filter(function (composer) {
-                if (!_this.isGroupedByNation || _this.activeGroupIdNacio < 0) {
+                if (!_this.isGroupedByNation || _this.activeGroupIdNacio === "") {
                     return true;
                 }
-                var nacio = _this.groupsNacio[_this.activeGroupIdNacio].nameMenu;
-                return composer.nacio === nacio;
+                return composer.nacio === _this.activeGroupIdNacio;
             }, this)
                 .sort(function (a1, a2) {
                 if (a1[_this.orderByKey] > a2[_this.orderByKey]) {
@@ -196,7 +224,7 @@ var ComposerStore = (function () {
     };
     Object.defineProperty(ComposerStore.prototype, "activeComposer", {
         get: function () {
-            return this.composers[this.activeIndex];
+            return this.composersRaw[this.activeIndex];
         },
         enumerable: true,
         configurable: true
@@ -225,7 +253,7 @@ var ComposerStore = (function () {
         var _this = this;
         mobx_1.transaction(function () {
             _this.orderByKey = null;
-            _this.composersRaw = ComposerStore.doShuffle(mobx_1.toJS(_this.composers));
+            _this.composersRaw = ComposerStore.doShuffle(mobx_1.toJS(_this.composersRawNumFiltered));
         });
     };
     ComposerStore.doShuffle = function (array) {
@@ -244,7 +272,12 @@ var ComposerStore = (function () {
             var _this = this;
             return this.activeComposerWorksWebApi
                 .sort(function (a, b) {
-                return b.performancesCount - a.performancesCount;
+                if (_this.sortComposerWorksKeyDir === "ascending") {
+                    return b[_this.sortComposerWorksKey] - a[_this.sortComposerWorksKey];
+                }
+                else {
+                    return a[_this.sortComposerWorksKey] - b[_this.sortComposerWorksKey];
+                }
             })
                 .filter(function (f) {
                 return f.nameWork.toLowerCase().includes(_this.worksFilter.toLowerCase());
@@ -253,7 +286,25 @@ var ComposerStore = (function () {
         enumerable: true,
         configurable: true
     });
+    ComposerStore.prototype.toggleSortComposerWorks = function (key) {
+        if (this.sortComposerWorksKey === key) {
+            if (!this.sortComposerWorksKeyDir) {
+                this.sortComposerWorksKeyDir = constants_1.SORT_ASCENDING;
+            }
+            else if (this.sortComposerWorksKeyDir === constants_1.SORT_ASCENDING) {
+                this.sortComposerWorksKeyDir = constants_1.SORT_DESCENDING;
+            }
+            else {
+                this.sortComposerWorksKeyDir = constants_1.SORT_ASCENDING;
+            }
+        }
+        else {
+            this.sortComposerWorksKey = key;
+            this.sortComposerWorksKeyDir = "ascending";
+        }
+    };
     ComposerStore.prototype.setOrderBy = function (key) {
+        debugger;
         if (key === this.orderByKey) {
             this.orderByDir *= -1;
         }
@@ -261,13 +312,26 @@ var ComposerStore = (function () {
     };
     Object.defineProperty(ComposerStore.prototype, "groupsNacioRaw", {
         get: function () {
-            return this.composersRaw.reduce(groupBy(function (t) { return t.nacio; }), Map());
+            return this.composersRawNumFiltered.reduce(groupBy(function (t) { return t.nacio; }), Map());
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ComposerStore.prototype, "groupsNacioSorted", {
+        get: function () {
+            return this.groupsNacio.sort(function (s1, s2) {
+                if (s1.countMenu < s2.countMenu) {
+                    return 1;
+                }
+                return -1;
+            });
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(ComposerStore.prototype, "groupsNacio", {
         get: function () {
+            debugger;
             var grups = this.groupsNacioRaw;
             var keys = grups.keys();
             return keys.map(function (k, i) {
@@ -277,14 +341,69 @@ var ComposerStore = (function () {
                     nameMenu: k
                 };
                 return ret;
-            });
+            }, this);
         },
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(ComposerStore.prototype, "composerRelsGrouped", {
+        get: function () {
+            var ret = this.composerRels.reduce(groupBy(function (t) { return t.relTipName; }), Map());
+            debugger;
+            return ret.entries();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ComposerStore.prototype.goArtist = function (idArtist) {
+        var _this = this;
+        debugger;
+        var composer = this.composersRaw.find(function (f) { return f.idMN === idArtist; });
+        if (!!composer) {
+            this.setActiveComposerId(idArtist);
+            this.routerStore.go(constants_1.ROUTE_COMPOSER_ITEM);
+        }
+        else {
+            this.performerStore.setActivePerformer(idArtist).then(function () {
+                _this.routerStore.go(constants_1.ROUTE_PERFORMER.replace(":idMN", idArtist));
+            });
+        }
+    };
+    ComposerStore.prototype.onHyperLink = function (href, e) {
+        var _this = this;
+        debugger;
+        e.preventDefault();
+        if (href.includes("-mn")) {
+            var p = href.lastIndexOf("-");
+            var idArtist = href.substr(p + 1);
+            this.goArtist(idArtist);
+            return true;
+        }
+        else if (href.includes("-mw")) {
+            debugger;
+            var p = href.lastIndexOf("-");
+            var idAlbumAM = href.substr(p + 1);
+            var url = constants_1.URL_WEB_API_DZK + "IdAlbumToAM?idAlbumAM=" + idAlbumAM;
+            axios_1.default.get(url).then(function (res) {
+                _this.goAlbumAM(res.data);
+            });
+            return true;
+        }
+        return false;
+    };
+    ComposerStore.prototype.goAlbumAM = function (idAlbum) {
+        var route = constants_1.ROUTE_ALBUM_TRACKS.replace(":idAlbum", idAlbum.toString());
+        this.routerStore.go(route);
+    };
+    ComposerStore.prototype.getImageArtist = function (idMN) {
+        return "http://localhost/PictureArtist/" + idMN + ".jpg";
+    };
     __decorate([
         mobx_1.observable
     ], ComposerStore.prototype, "activeIndex", void 0);
+    __decorate([
+        mobx_1.action
+    ], ComposerStore.prototype, "setActiveComposerId", null);
     __decorate([
         mobx_1.computed
     ], ComposerStore.prototype, "lastNameComposer", null);
@@ -303,6 +422,9 @@ var ComposerStore = (function () {
     __decorate([
         mobx_1.observable
     ], ComposerStore.prototype, "composersRaw", void 0);
+    __decorate([
+        mobx_1.computed
+    ], ComposerStore.prototype, "composersRawNumFiltered", null);
     __decorate([
         mobx_1.computed
     ], ComposerStore.prototype, "composers", null);
@@ -344,6 +466,15 @@ var ComposerStore = (function () {
     ], ComposerStore.prototype, "activeComposerWorks", null);
     __decorate([
         mobx_1.observable
+    ], ComposerStore.prototype, "sortComposerWorksKey", void 0);
+    __decorate([
+        mobx_1.observable
+    ], ComposerStore.prototype, "sortComposerWorksKeyDir", void 0);
+    __decorate([
+        mobx_1.action
+    ], ComposerStore.prototype, "toggleSortComposerWorks", null);
+    __decorate([
+        mobx_1.observable
     ], ComposerStore.prototype, "orderByKey", void 0);
     __decorate([
         mobx_1.observable
@@ -356,6 +487,9 @@ var ComposerStore = (function () {
     ], ComposerStore.prototype, "groupsNacioRaw", null);
     __decorate([
         mobx_1.computed
+    ], ComposerStore.prototype, "groupsNacioSorted", null);
+    __decorate([
+        mobx_1.computed
     ], ComposerStore.prototype, "groupsNacio", null);
     __decorate([
         mobx_1.observable
@@ -366,6 +500,21 @@ var ComposerStore = (function () {
     __decorate([
         mobx_1.observable
     ], ComposerStore.prototype, "indexHover", void 0);
+    __decorate([
+        mobx_1.observable
+    ], ComposerStore.prototype, "RANDOM_NUM_COMPOSERS", void 0);
+    __decorate([
+        mobx_1.observable
+    ], ComposerStore.prototype, "composerRels", void 0);
+    __decorate([
+        mobx_1.computed
+    ], ComposerStore.prototype, "composerRelsGrouped", null);
+    __decorate([
+        mobx_1.action
+    ], ComposerStore.prototype, "goArtist", null);
+    __decorate([
+        mobx_1.action
+    ], ComposerStore.prototype, "onHyperLink", null);
     return ComposerStore;
 }());
 exports.default = ComposerStore;

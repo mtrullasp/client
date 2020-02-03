@@ -21,7 +21,7 @@ class DzProgressNew extends React.Component<IProps, {}> {
         style={{
           display: "inline-flex",
           position: "relative",
-          top: 20,
+          top: 10,
           width: "100%"
         }}
       >

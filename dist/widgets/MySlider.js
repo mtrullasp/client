@@ -12,6 +12,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var styles_1 = require("@material-ui/core/styles");
@@ -38,7 +49,7 @@ var MySlider = (function (_super) {
         return _super.call(this, props) || this;
     }
     MySlider.prototype.render = function () {
-        return (React.createElement("div", { style: { width: 500 } },
+        return (React.createElement("div", { style: __assign({ width: 500 }, this.props.style) },
             React.createElement(rc_slider_1.default, { className: "progress", max: this.props.max, value: this.props.value, onChange: this.props.onChange, "aria-labelledby": "slider-icon" })));
     };
     return MySlider;

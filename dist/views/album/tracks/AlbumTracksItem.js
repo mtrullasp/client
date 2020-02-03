@@ -83,6 +83,7 @@ var AlbumTracksItem = (function (_super) {
                             aStore.activeAlbum.idAlbum, target: "_blank" }, "SQL"),
                     " ",
                     React.createElement("a", { href: "http://www.allmusic.com/album/" + aStore.activeAlbum.idMW, target: "_blank" }, aStore.activeAlbum.idMW)))));
+        var lastIdMC = "";
         return (React.createElement("div", { style: {
                 position: "relative",
                 marginTop: 0
@@ -104,69 +105,72 @@ var AlbumTracksItem = (function (_super) {
                                     React.createElement("b", null, this.props.albumStore.activeTrackWorkDescAuthor))),
                             React.createElement(semantic_ui_react_1.List, { size: "medium" }, aStore.responseAlbumsTracks &&
                                 aStore.responseAlbumsTracks.AlbumWorks.map(function (at, index) {
+                                    var isNewMC = at.idMC !== lastIdMC;
+                                    lastIdMC = at.idMC;
                                     var tr = at;
                                     var iTr = index;
-                                    return (React.createElement(semantic_ui_react_1.List.Content, { style: { marginBottom: 30 } },
-                                        React.createElement("p", null,
-                                            React.createElement("h3", { style: { margin: 0 } }, at.composerName)),
-                                        React.createElement("p", { style: {
-                                                marginLeft: 10,
-                                                marginTop: -10,
-                                                marginBottom: 0
-                                            } },
-                                            React.createElement("h4", null, at.nameWork)),
-                                        React.createElement("p", { style: { marginLeft: 20 } },
-                                            React.createElement("p", { className: "item", style: {
-                                                    width: "auto",
-                                                    cursor: "pointer",
-                                                    margin: 0,
-                                                    padding: 4,
-                                                    fontWeight: _this.props.albumStore.trackIdIsPlaying ===
-                                                        at.idTrack_DZ
-                                                        ? 900
-                                                        : "normal"
+                                    var renderTrack = (React.createElement(React.Fragment, null,
+                                        React.createElement("div", { style: { paddingBottom: 5 } },
+                                            React.createElement("div", { style: {
+                                                    verticalAlign: "bottom",
+                                                    display: "flex"
+                                                }, onClick: function () {
+                                                    _this.props.albumStore.playTracks(at.idrack_DZ_ord, iTr);
                                                 } },
-                                                React.createElement("div", { style: { paddingBottom: 5 } },
-                                                    React.createElement("div", { style: {
-                                                            verticalAlign: "bottom",
-                                                            display: "flex"
-                                                        }, onClick: function () {
-                                                            _this.props.albumStore.playTracks(at.idrack_DZ_ord, iTr);
-                                                        } },
-                                                        React.createElement("div", { style: { opacity: 0.8, width: 30 } }, _this.props.albumStore
-                                                            .trackIdIsPlaying === tr.idTrack_DZ ? (React.createElement(IconPlaying_1.default, null)) : (React.createElement(semantic_ui_react_1.Icon, { name: "play", className: typestyle_1.style({
-                                                                color: paleta_1.default.color200,
-                                                                $nest: {
-                                                                    "&:hover": {
-                                                                        color: paleta_1.default.color800
-                                                                    }
-                                                                }
-                                                            }) }))),
-                                                        React.createElement("div", { style: {
-                                                                verticalAlign: "bottom",
-                                                                display: "inline-block"
-                                                            } },
-                                                            tr.idMC,
-                                                            " ",
-                                                            tr.idMC_ord),
-                                                        React.createElement("div", { style: {
-                                                                verticalAlign: "bottom",
-                                                                display: "inline-block"
-                                                            } },
-                                                            tr.idMC_ord,
-                                                            " ",
-                                                            React.createElement(react_router_dom_1.NavLink, { to: "/versions/" +
-                                                                    tr.idMC +
-                                                                    "/" +
-                                                                    tr.idMC_ord }, tr.name),
-                                                            " ")))))));
+                                                React.createElement("div", { style: { opacity: 0.8, width: 30 } }, _this.props.albumStore.trackIdIsPlaying ===
+                                                    tr.idTrack_DZ ? (React.createElement(IconPlaying_1.default, null)) : (React.createElement(semantic_ui_react_1.Icon, { name: "play", className: typestyle_1.style({
+                                                        color: paleta_1.default.color200,
+                                                        $nest: {
+                                                            "&:hover": {
+                                                                color: paleta_1.default.color800
+                                                            }
+                                                        }
+                                                    }) }))),
+                                                React.createElement("div", { style: {
+                                                        verticalAlign: "bottom",
+                                                        display: "inline-block"
+                                                    } },
+                                                    tr.idMC,
+                                                    " ",
+                                                    tr.idMC_ord),
+                                                React.createElement("div", { style: {
+                                                        verticalAlign: "bottom",
+                                                        display: "inline-block"
+                                                    } },
+                                                    tr.idMC_ord,
+                                                    " ",
+                                                    React.createElement(react_router_dom_1.NavLink, { to: "/versions/" + tr.idMC + "/" + tr.idMC_ord }, tr.name),
+                                                    " ")))));
+                                    if (isNewMC) {
+                                        return (React.createElement(semantic_ui_react_1.List.Content, { style: { marginBottom: 0 } },
+                                            React.createElement("p", null,
+                                                React.createElement("h3", { style: { margin: 0 } }, at.composerName)),
+                                            React.createElement("p", { style: {
+                                                    marginLeft: 10,
+                                                    marginTop: -10,
+                                                    marginBottom: 0
+                                                } },
+                                                React.createElement("h4", null, at.nameWork)),
+                                            React.createElement("p", { style: { marginLeft: 20 } },
+                                                React.createElement("p", { className: "item", style: {
+                                                        width: "auto",
+                                                        cursor: "pointer",
+                                                        margin: 0,
+                                                        padding: 4,
+                                                        fontWeight: _this.props.albumStore.trackIdIsPlaying ===
+                                                            at.idTrack_DZ
+                                                            ? 900
+                                                            : "normal"
+                                                    } })),
+                                            React.createElement("p", null, renderTrack)));
+                                    }
                                 }))))),
                 React.createElement("div", { style: {
                         position: "fixed",
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        height: 70,
+                        height: 80,
                         overflow: "hidden",
                         background: "#eee",
                         opacity: 0.9

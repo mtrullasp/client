@@ -53,7 +53,7 @@ var PlayerBar = (function (_super) {
                 React.createElement(react_flexbox_grid_1.Col, { lg: 8 },
                     React.createElement(react_flexbox_grid_1.Row, null,
                         React.createElement(react_flexbox_grid_1.Col, { lg: 12 },
-                            React.createElement("div", { style: { display: "block", position: "relative", top: -20 } },
+                            React.createElement("div", { style: { display: "block", position: "relative", top: -20, color: "white" } },
                                 React.createElement(TrackListPlayerDFlow_1.InfoWorkSuperior, null)),
                             React.createElement("div", { style: { display: "block", position: "relative", top: -62 } },
                                 React.createElement(TrackListPlayerDFlow_1.InfoWorkInferior, null)))),

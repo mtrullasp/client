@@ -1,5 +1,5 @@
 import * as React from "react";
-import { SECOND_ACCENT_COLOR } from "../../util/constants";
+import { TRUE_ACCENT_COLOR } from "../../util/constants";
 import { RouterStore } from "../stores/RouterStore";
 import { inject, observer } from "mobx-react";
 import { HORITZONTAL_MARGIN } from "../../Header";
@@ -17,7 +17,7 @@ class TitleBar extends React.Component<IProps, {}> {
       <div
         style={{
           fontSize: 20,
-          color: SECOND_ACCENT_COLOR
+          color: TRUE_ACCENT_COLOR
         }}
       >
         {this.props.content}

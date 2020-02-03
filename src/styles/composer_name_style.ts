@@ -9,15 +9,15 @@ const composer_name_style: CSSProperties = {
   letterSpacing: 0,
   height: 80,
   fontFamily: FONT_FAT,
-  fontSize: FONT_SIZE * 1.5,
+  fontSize: FONT_SIZE * 1,
   fontWeight: 900,
   position: "relative",
   top: 0,
   margin: 0,
-  marginLeft: 0,
+  marginLeft: -10,
   /*textShadow: "0 0 2px black",*/
   /*color: "#FEFEFA", /!*ACCENT_COLOR,*!/*/
-  lineHeight: "60px",
+  lineHeight: "20px",
   display: "inline-block",
   textTransform: "uppercase",
   textAlign: "left",

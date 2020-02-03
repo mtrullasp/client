@@ -26,13 +26,14 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 require("../styles/elevation.css");
+require("./elevation.scss");
 var MyPaper = (function (_super) {
     __extends(MyPaper, _super);
     function MyPaper(props, context) {
         return _super.call(this, props, context) || this;
     }
     MyPaper.prototype.render = function () {
-        return (React.createElement("div", { className: "card card-" + this.props.elevation, style: __assign({}, this.props.style) }, this.props.children));
+        return (React.createElement("div", { className: "elevation-" + this.props.elevation, style: __assign(__assign({}, this.props.style), { width: "100%", padding: 0, margin: 0 }) }, this.props.children));
     };
     MyPaper.defaultProps = {
         style: { width: "100%" }

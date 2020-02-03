@@ -44,15 +44,16 @@ var AlbumsToolbar = (function (_super) {
     }
     AlbumsToolbar.prototype.render = function () {
         var _this = this;
+        var itemStyle = {};
         return (React.createElement("div", null,
-            React.createElement(semantic_ui_react_1.Menu, { size: "tiny", compact: true, color: "black" },
-                React.createElement(semantic_ui_react_1.Menu.Item, { header: true }, "Sort By"),
+            React.createElement(semantic_ui_react_1.Menu, { size: "tiny", compact: true, color: "black", text: true },
+                React.createElement(semantic_ui_react_1.Menu.Item, { style: itemStyle, header: true }, "Sort By"),
                 React.createElement(semantic_ui_react_1.Menu.Item, { name: "Date release", key: "releaseDate", active: this.props.albumStore.orderByKey === "releaseDate", onClick: function () { return _this.props.albumStore.setOrderByKey("releaseDate"); } }),
                 React.createElement(semantic_ui_react_1.Menu.Item, { name: "Shuffle", key: "shuffle", onClick: function () { return _this.props.albumStore.shuffle(); } })),
             React.createElement("span", { style: { marginRight: 20 } }),
-            React.createElement(semantic_ui_react_1.Menu, { size: "tiny", compact: true },
+            React.createElement(semantic_ui_react_1.Menu, { size: "tiny", compact: true, text: true },
                 React.createElement(semantic_ui_react_1.Menu.Item, { header: true }, "Group By"),
-                React.createElement(semantic_ui_react_1.Menu.Item, { name: "Composer", key: "composer", onClick: function () {
+                React.createElement(semantic_ui_react_1.Menu.Item, { name: "Composer", key: "composers", onClick: function () {
                         debugger;
                         _this.props.albumStore.setGroupByField("composers");
                     }, active: false }),

@@ -1,6 +1,12 @@
 import * as React from "react";
 import DivInline from "../../widgets/DivInline.";
-import { FONT_SLIM, SECOND_ACCENT_COLOR } from "../../util/constants";
+import {
+  ELEGANT_FONT,
+  FONT_SEMI_SLIM,
+  FONT_SLIM,
+  HEADER_FONT,
+  TRUE_ACCENT_COLOR
+} from "../../util/constants";
 import "../../main.css";
 import { LastNamePersona } from "./LastNamePersona";
 import paleta from "../../styles/paleta";
@@ -8,21 +14,46 @@ import paleta from "../../styles/paleta";
 interface IProps {
   firstName: string;
   lastName: string;
-  infoNeixDefu: string;
+  AnyoNeix: string;
+  AnyoDefu: string;
+  CiutatNeix: string;
+  CiutatDefu: string;
+  PaisNeix: string;
+  PaisDefu: string;
   onClick?: () => void;
 }
 
 const MARGIN_TOP = 40;
-const FONT_SIZE = 70;
+const FONT_SIZE = 100;
 
 const HeadNameComposer = (props: IProps) => {
   return (
     <div onClick={() => props.onClick()}>
       <DivInline>
         <LastNamePersona
+          minFontSize={120}
+          maxFontSize={140}
           lastName={props.lastName}
           size={80}
+          fontWeight={900}
+          className={"tresd"}
         />
+        <DivInline>
+          <p
+            style={{
+              position: "relative",
+              marginLeft: 20,
+              top: 0,
+              fontSize: 16,
+              fontWeight: 400,
+              color: "black"
+            }}
+          >
+            {props.CiutatNeix} ({props.PaisNeix}), <b>{props.AnyoNeix}</b> <br/>
+            {props.CiutatDefu} ({props.PaisDefu}), <b>{props.AnyoDefu}</b> ♰
+          </p>
+        </DivInline>
+        <br />
         <div
           /*
                     onClick={() => {
@@ -30,36 +61,25 @@ const HeadNameComposer = (props: IProps) => {
                     }}
           */
           style={{
+            textAlign: "right",
+            right: 0,
             position: "relative",
-            top: 0,
-            fontFamily: FONT_SLIM,
-            fontSize: FONT_SIZE / 2,
-            fontWeight: 900,
-            fontStyle: "normal",
+            top: -25,
+            fontFamily: ELEGANT_FONT,
+            fontSize: 25,
+            fontWeight: 500,
             margin: 0,
-            marginLeft: 10,
-            color: SECOND_ACCENT_COLOR,
-            lineHeight: "60px",
+            marginLeft: 0,
+            color: TRUE_ACCENT_COLOR,
+            opacity: 1,
+            lineHeight: "40px",
             display: "inline-block",
-            textTransform: "uppercase",
+            textTransform: "none",
             letterSpacing: 0
           }}
         >
           {props.firstName}
         </div>
-      </DivInline>
-      <DivInline>
-        <p
-          style={{
-            marginTop: 0,
-            marginLeft: 40,
-            fontSize: 14,
-            fontWeight: 300,
-            color: "black"
-          }}
-        >
-          {props.infoNeixDefu}
-        </p>
       </DivInline>
     </div>
   );

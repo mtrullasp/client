@@ -26,13 +26,12 @@ var constants_1 = require("../../../util/constants");
 var react_flexbox_grid_1 = require("react-flexbox-grid");
 var typestyle_1 = require("typestyle");
 var MaxHeightContainer_1 = require("../../../widgets/MaxHeightContainer");
-var MasonryGrid_1 = require("../../../widgets/MasonryGrid/MasonryGrid");
 var paleta_1 = require("../../../styles/paleta");
+var ReactGallery_1 = require("../../../widgets/MasonryGrid/ReactGallery");
 var PerformerCollection = (function (_super) {
     __extends(PerformerCollection, _super);
     function PerformerCollection(props, context) {
         var _this = _super.call(this, props, context) || this;
-        debugger;
         props.performerStore.activePerformerIdRol = Number(props.match.params["idRol"]);
         _this.state = { indexHover: -1 };
         return _this;
@@ -95,6 +94,8 @@ var PerformerCollection = (function (_super) {
             return {
                 src: "http://127.0.1.0/PictureArtist/" + performer.idMN + ".jpg",
                 thumbnail: "http://127.0.1.0/PictureArtist/" + performer.idMN + ".jpg",
+                thumbnailWidth: performer.widthImage,
+                thumbnailHeight: performer.heightImage,
                 performer: performer,
                 tags: [{ value: performer.nameMN, title: "" }]
             };
@@ -108,16 +109,15 @@ var PerformerCollection = (function (_super) {
                 overflowY: "auto"
             }, footerHeight: 30 },
             React.createElement("div", { style: {
-                    width: "100%",
-                    marginRight: constants_1.MARGIN_HORITZONTAL / 2,
+                    marginRight: constants_1.MARGIN_HORITZONTAL,
                     overflowY: "auto"
                 } },
                 React.createElement("div", { style: { position: "relative", top: 5 } }),
-                React.createElement(MasonryGrid_1.default, { onClickThumbnail: function (item) {
+                React.createElement(ReactGallery_1.default, { onClickThumbnail: function (item) {
                         _this.props.albumStore.activeArtistIdMN = item.performer.idMN;
                         _this.props.albumStore.activeArtistNameMN =
                             item.performer.nameMN;
-                        _this.props.history.push("/performer/" + item.performer.idMN + "/albums");
+                        _this.props.history.push("/performer/" + item.performer.idMN);
                     }, gridEngine: "react-masonry-component", gutter: 5, numColumns: constants_1.COMPOSER_NUMBER_COLS, items: images })))));
     };
     PerformerCollection = __decorate([

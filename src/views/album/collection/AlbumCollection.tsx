@@ -24,6 +24,9 @@ import "../../../styles/elevation.css";
 import CollectionCounter from "../../../core/collections/CollectionCounter";
 import AlbumsGroupedByField from "../toolbar/AlbumsGroupedByField";
 import MyPaper from "../../../widgets/MyPaper";
+import { LazyImage } from "react-lazy-images";
+import ScrollBar from "react-custom-scrollbars";
+import DivInline from "../../../widgets/DivInline.";
 
 const FACTOR_Y = 1.1;
 const ALBUMS_NUMBER_COLS = 4;
@@ -67,18 +70,15 @@ class AlbumCollection extends React.Component<IProps, {}> {
             }}
           >
             {/*<LazyLoad width={SIZE_RECT} height={"auto"} debounce={true}>*/}
-            <MyPaper
-              style={{
-                top: -15,
-                left: -15,
-                height: width,
-                width: "auto"
-              }}
-              elevation={5}
-            >
-              <Image
-                fluid={true}
+            <MyPaper elevation={15}>
+              <LazyImage
                 src={a.urlCover}
+                placeholder={({ imageProps, ref }) => <img ref={ref} />}
+                actual={({ imageProps }) => (
+                  <div className={"LazyImage-Actual"}>
+                    <img {...imageProps} />
+                  </div>
+                )}
                 style={{
                   height: width,
                   width: "auto"
@@ -95,30 +95,43 @@ class AlbumCollection extends React.Component<IProps, {}> {
           !!this.props.albumStore.groupByField ? <AlbumsGroupedByField /> : null
         }
         sectionContent={
-          <MaxHeightContainer style={{ overflowY: "hidden" }}>
-            <div
-              style={{
-                overflowY: "auto",
-                width: "100%"
-              }}
+          <MaxHeightContainer>
+            <ScrollBar
+              autoHide={true}
+              hideTracksWhenNotNeeded={true}
+              thumbSize={50}
             >
-              <CollectionCounter
-                itemsCount={this.props.albumStore.albumsCount}
-                itemsDesc={"albums"}
-              />
-              <br/>
-              <MaxHeightContainer style={{ overflowY: "auto" }}>
-                <MasonryGrid
-                  gutter={10}
-                  numColumns={this.props.albumStore.numColumsAlbums}
-                  items={items}
-                  factorY={FACTOR_Y}
-                />
-              </MaxHeightContainer>
-            </div>
+              <div
+                style={{
+                  width: "100%"
+                }}
+              >
+                <MaxHeightContainer>
+                  <MasonryGrid
+                    style={{ margin: 10 }}
+                    gutter={15}
+                    numColumns={this.props.albumStore.numColumsAlbums}
+                    items={items}
+                    factorY={FACTOR_Y}
+                  />
+                </MaxHeightContainer>
+              </div>
+            </ScrollBar>
           </MaxHeightContainer>
         }
-        headerContent={<AlbumsToolbar />}
+        headerContent={
+          <div>
+            <DivInline>
+              <CollectionCounter
+                itemsCount={this.props.albumStore.albumsCount}
+                itemsDesc={"albums."}
+              />
+            </DivInline>
+            <DivInline>
+              <AlbumsToolbar />
+            </DivInline>
+          </div>
+        }
       />
     );
   }

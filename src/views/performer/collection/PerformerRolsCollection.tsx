@@ -5,9 +5,9 @@ import {
   COMPOSER_NUMBER_COLS,
   ELEGANT_FONT,
   MARGIN_HORITZONTAL,
-  ROUTE_COMPOSERS_ITEM,
-  ROUTE_PERFORMER_ALBUMS,
-  SECOND_ACCENT_COLOR,
+  ROUTE_COMPOSERS_ITEM_WORKS,
+  ROUTE_PERFORMER,
+  TRUE_ACCENT_COLOR,
   ROUTE_PERFORMER_COLLECTION
 } from "../../../util/constants";
 import { Row } from "react-flexbox-grid";
@@ -22,6 +22,7 @@ import {
   IPerformerRols,
   PerformerStore
 } from "../../../core/stores/PerformerStore";
+import MyReactGallery from "../../../widgets/MasonryGrid/ReactGallery";
 interface IState {
   indexHover: number;
 }
@@ -78,7 +79,7 @@ class PerformerRolsCollection extends React.Component<IProps, {}> {
                 src={"http://127.0.1.0/PictureArtist/" + pr.UrlImage}
                 alt={pr.NameRol}
                 style={{
-                  height: width,
+                  height: height,
                   width: width,
                   opacity:
                     this.state.indexHover === index ? opacity + 0.4 : opacity
@@ -167,7 +168,9 @@ class PerformerRolsCollection extends React.Component<IProps, {}> {
           src: src,
           thumbnail: "http://127.0.1.0/PictureArtist/" + performer.UrlImage,
           performer: performer,
-          tags: [{ value: performer.NameRol, title: "" }]
+          tags: [{ value: performer.NameRol, title: "" }],
+          thumbnailWidth: performer.WidthImage,
+          thumbnailHeight: performer.HeightImage
         };
       }
     );
@@ -186,7 +189,10 @@ class PerformerRolsCollection extends React.Component<IProps, {}> {
           footerHeight={30}
         >
           <div
-            style={{ marginRight: MARGIN_HORITZONTAL / 2, overflowY: "auto" }}
+            style={{
+              marginRight: MARGIN_HORITZONTAL,
+              overflowY: "auto"
+            }}
           >
             <div style={{ position: "relative", top: 5 }}>
               {/*
@@ -199,9 +205,9 @@ class PerformerRolsCollection extends React.Component<IProps, {}> {
               />
 */}
             </div>
-            <MasonryGrid
+            <MyReactGallery
               onClickThumbnail={(item: { performer: IPerformerRols }) => {
-/*
+                /*
                 this.props.performerStore.activePerformerIdRol =
                   item.performer.IdRol;
 */
@@ -216,6 +222,7 @@ class PerformerRolsCollection extends React.Component<IProps, {}> {
               gridEngine="react-masonry-component"
               numColumns={COMPOSER_NUMBER_COLS}
               items={images}
+              images={images}
             />
           </div>
         </MaxHeightContainer>

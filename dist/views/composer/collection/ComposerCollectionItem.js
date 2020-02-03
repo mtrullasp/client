@@ -21,113 +21,46 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var mobx_react_1 = require("mobx-react");
-var core_1 = require("@blueprintjs/core");
 var constants_1 = require("../../../util/constants");
 var semantic_ui_react_1 = require("semantic-ui-react");
 require("../../../widgets/MyText/MyText_Next.css");
 var react_scroll_into_view_if_needed_1 = require("react-scroll-into-view-if-needed");
-var paleta_1 = require("../../../styles/paleta");
 var MyPaper_1 = require("../../../widgets/MyPaper");
 var LastNamePersona_1 = require("../../header/LastNamePersona");
 var FACTOR_Y = 1.01;
+var CARD_HEIGHT = 300;
 var ComposerCollectionItem = (function (_super) {
     __extends(ComposerCollectionItem, _super);
     function ComposerCollectionItem(props, context) {
         return _super.call(this, props, context) || this;
     }
     ComposerCollectionItem.prototype.render = function () {
+        var _this = this;
         if (!this.props.composerStore.composers) {
             return null;
         }
         var composer = this.props.composer;
         var index = this.props.index;
         var width = this.props.width;
-        var opacity = 0.3;
-        if (true || this.props.composerStore.indexHover !== index) {
-            return (React.createElement("div", { key: composer.idMN, className: "composer-item no-obackground-collection-items", style: {} },
-                React.createElement(react_scroll_into_view_if_needed_1.default, { active: this.props.composerStore.indexHover === index },
+        var itemSegment = function (opacity) {
+            var _a, _b;
+            return (React.createElement("div", { key: composer.idMN, className: "composer-item no-obackground-collection-items", style: { borderRadius: 50 }, onClick: function () {
+                    _this.props.onClick(composer);
+                } },
+                React.createElement(react_scroll_into_view_if_needed_1.default, { active: _this.props.composerStore.indexHover === index },
                     React.createElement("div", { style: {
-                            position: "relative",
-                            top: 0,
-                            left: 8,
-                            bottom: 0,
-                            marginBottom: 0,
-                            overflow: "hidden",
-                            opacity: 1
+                            padding: 0,
+                            margin: 0,
+                            borderColor: "#fcfcfc",
+                            borderRadius: 30
                         } },
-                        React.createElement(core_1.Card, { elevation: 4, interactive: true, style: { padding: 0, margin: 0 } },
-                            React.createElement(semantic_ui_react_1.Image, { src: this.props.composerStore.getComposerPicture(composer.IdComposer), alt: composer.name, style: {
+                        React.createElement("div", { style: {} },
+                            React.createElement("img", { className: "composer-image", src: _this.props.composerStore.getComposerPicture(composer.IdComposer), alt: composer.name, style: {
                                     height: width * FACTOR_Y,
                                     width: "auto",
-                                    opacity: this.props.composerStore.indexHover === index ? 1 : 1
-                                } }),
-                            React.createElement("div", { style: {
-                                    color: "black",
-                                    padding: 0,
-                                    fontSize: 20,
-                                    fontFamily: constants_1.ELEGANT_FONT,
-                                    fontWeight: 800
-                                } },
-                                React.createElement("div", { style: {
-                                        maxWidth: "100%",
-                                        maxHeight: "100%"
-                                    } },
-                                    React.createElement(semantic_ui_react_1.Grid.Row, null,
-                                        React.createElement("div", { style: {
-                                                position: "absolute",
-                                                fontWeight: 900,
-                                                textAlign: "center",
-                                                textTransform: "uppercase",
-                                                marginRight: 0,
-                                                marginLeft: 0,
-                                                fontSize: 22,
-                                                left: 0,
-                                                right: 0,
-                                                bottom: -30,
-                                                fontFamily: "Myriad Pro",
-                                                opacity: 1,
-                                                color: constants_1.ACCENT_COLOR
-                                            } },
-                                            React.createElement(LastNamePersona_1.LastNamePersona, { lastName: this.props.composerStore.getCognomComposer(composer.sort_name), opacity: this.props.composerStore.indexHover === index
-                                                    ? 1
-                                                    : 0.7, size: 30 }),
-                                            React.createElement("div", { style: {
-                                                    position: "relative",
-                                                    top: -30,
-                                                    fontFamily: constants_1.ELEGANT_FONT,
-                                                    fontWeight: 900,
-                                                    textTransform: "none",
-                                                    color: paleta_1.default.color200,
-                                                    fontSize: 16
-                                                } }, this.props.composerStore.getNomDePilaComposer(composer.sort_name)))),
-                                    React.createElement(semantic_ui_react_1.Grid.Row, null)),
-                                React.createElement(semantic_ui_react_1.Grid.Row, null)))))));
-        }
-        else {
-            return (React.createElement(MyPaper_1.default, { elevation: 5 },
-                React.createElement(react_scroll_into_view_if_needed_1.default, { active: this.props.composerStore.indexHover === index },
-                    React.createElement("div", { style: {
-                            position: "relative",
-                            top: 25,
-                            left: 5,
-                            width: "100%",
-                            bottom: 0,
-                            overflow: "hidden",
-                            opacity: 1,
-                            margin: 0,
-                            padding: 10
-                        } },
-                        React.createElement(semantic_ui_react_1.Image, { src: this.props.composerStore.getComposerPicture(composer.IdComposer), alt: composer.name, style: {
-                                padding: 0,
-                                marginTop: 0,
-                                height: width * FACTOR_Y,
-                                width: "auto",
-                                opacity: 1
-                            } }),
+                                    opacity: opacity
+                                } })),
                         React.createElement("div", { style: {
-                                borderRadius: 0,
-                                opacity: 1,
-                                height: 20,
                                 color: "black",
                                 padding: 0,
                                 fontSize: 20,
@@ -136,46 +69,49 @@ var ComposerCollectionItem = (function (_super) {
                             } },
                             React.createElement("div", { style: {
                                     maxWidth: "100%",
-                                    maxHeight: "100%",
-                                    position: "relative",
-                                    fontWeight: 800,
-                                    textAlign: "center",
-                                    textTransform: "uppercase",
-                                    fontSize: 23,
-                                    bottom: 10,
-                                    width: "100%",
-                                    fontFamily: constants_1.ELEGANT_FONT,
-                                    color: constants_1.ACCENT_COLOR
+                                    maxHeight: "100%"
                                 } },
-                                React.createElement(semantic_ui_react_1.Grid, null,
-                                    React.createElement(semantic_ui_react_1.Grid.Row, null,
+                                React.createElement(semantic_ui_react_1.Grid.Row, null,
+                                    React.createElement("div", { style: {
+                                            position: "absolute",
+                                            fontWeight: 500,
+                                            textAlign: "center",
+                                            textTransform: "uppercase",
+                                            marginRight: 0,
+                                            marginLeft: 0,
+                                            fontSize: 20,
+                                            left: 0,
+                                            right: 0,
+                                            bottom: -55,
+                                            fontFamily: "Myriad Pro",
+                                            opacity: 1,
+                                            color: constants_1.ACCENT_COLOR
+                                        } },
+                                        React.createElement(LastNamePersona_1.LastNamePersona, { lastName: _this.props.composerStore.getCognomComposer(composer.sort_name), opacity: _this.props.composerStore.indexHover === index ? 1 : 1, size: 25, fontWeight: 800 }),
                                         React.createElement("div", { style: {
-                                                position: "absolute",
+                                                position: "relative",
+                                                top: -60,
+                                                fontFamily: constants_1.ELEGANT_FONT,
                                                 fontWeight: 900,
-                                                textAlign: "center",
-                                                textTransform: "uppercase",
-                                                marginRight: 0,
-                                                marginLeft: 0,
-                                                fontSize: 22,
-                                                left: 0,
-                                                right: 0,
-                                                bottom: 0,
-                                                fontFamily: "Myriad Pro",
-                                                color: "black"
+                                                textTransform: "none",
+                                                fontSize: 16
                                             } },
-                                            React.createElement(LastNamePersona_1.LastNamePersona, { lastName: this.props.composerStore.getCognomComposer(composer.sort_name), opacity: 1, size: 30 }),
-                                            React.createElement("div", { style: {
-                                                    position: "relative",
-                                                    top: 0,
-                                                    fontFamily: constants_1.ELEGANT_FONT,
-                                                    fontWeight: 900,
-                                                    textTransform: "none",
-                                                    color: paleta_1.default.color900,
-                                                    fontSize: 16
-                                                } }, this.props.composerStore.getNomDePilaComposer(composer.sort_name))),
-                                        React.createElement("div", null)),
-                                    React.createElement(semantic_ui_react_1.Grid.Row, null))),
+                                            _this.props.composerStore.getNomDePilaComposer(composer.sort_name),
+                                            React.createElement("br", null),
+                                            React.createElement("span", { style: { marginTop: -10, fontSize: 13 } }, (_a = composer) === null || _a === void 0 ? void 0 :
+                                                _a.AnyoNeix,
+                                                " -",
+                                                " ", (_b = composer) === null || _b === void 0 ? void 0 :
+                                                _b.AnyoDefu,
+                                                " \u2670")))),
+                                React.createElement(semantic_ui_react_1.Grid.Row, null)),
                             React.createElement(semantic_ui_react_1.Grid.Row, null))))));
+        };
+        if (this.props.composerStore.indexHover !== index) {
+            return itemSegment(0.3);
+        }
+        else {
+            return (React.createElement(MyPaper_1.default, { elevation: 20, style: { opacity: 1, padding: 0, borderRadius: 30 } }, itemSegment(1)));
         }
     };
     ComposerCollectionItem = __decorate([

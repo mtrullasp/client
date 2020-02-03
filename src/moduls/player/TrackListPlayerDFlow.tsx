@@ -1,6 +1,6 @@
 import * as React from "react";
 import classNames from "classnames";
-import * as Icon from "react-feather";
+// import * as Icon from "react-feather";
 import { DebounceInput } from "react-debounce-input";
 import Mousetrap from "mousetrap";
 import { inject, observer } from "mobx-react";
@@ -11,10 +11,14 @@ import { ROUTE_KLASSIC_RANK } from "../../util/constants";
 import togglePlayer from "./togglePlayer";
 import DzFlowList from "./controls/DzFlowList";
 import { RouterStore } from "../../core/stores/RouterStore";
-import { Store } from "@material-ui/icons";
+// import { Store } from "@material-ui/icons";
 import AlbumStore from "../../core/stores/AlbumStore";
 import "./playerBar.new.scss";
 import TextFit from "../../widgets/TextFit/TextFit";
+import { Icon } from "semantic-ui-react";
+import * as IconFeather from "react-feather";
+import { CSSProperties } from "react";
+import ActiveCredits from "../../views/album/tracks/ActiveCredits";
 //import "../../../node_modules/react-jinke-music-player/assets/index.css";
 //const MusicPlayerObjects = require("react-jinke-music-player");debugger ;
 //const CircleProcessBar = MusicPlayerObjects.CircleProcessBar;
@@ -121,6 +125,7 @@ class TrackListPlayerDFlow extends React.Component<IProps, {}> {
 interface IFavBtnProps {
   routerStore?: RouterStore;
   albumStore?: AlbumStore;
+  style?: CSSProperties;
 }
 @inject("albumStore")
 @inject("routerStore")
@@ -129,14 +134,19 @@ interface IFavBtnProps {
 export class FavBtn extends React.Component<IFavBtnProps> {
   render() {
     return (
-      <Icon.Heart
-        style={
-          this.props.albumStore.activeTrackIsFavorite ? { fill: "black" } : {}
-        }
-        className="player-button"
+      <IconFeather.Heart
+        style={{
+          ...this.props.style,
+          color: "white",
+          marginTop: 5,
+          ...(this.props.albumStore.activeTrackIsFavorite
+            ? { fill: "white" }
+            : {})
+        }}
+        /*className="player-button"*/
         onClick={() =>
           this.props.albumStore.toggleFavoriteTrack(
-            this.props.albumStore.activeTrack.idDeezerTrack
+            this.props.albumStore.activeTrack?.idTrack_DZ
           )
         }
       />
@@ -159,11 +169,11 @@ export class VersionsBtn extends React.Component<IVersionsProps> {
     }
     return (
       !!this.props.albumStore.activeTrack &&
-      !!this.props.albumStore.activeTrack.idWork && (
-        <Icon.Music
+      !!this.props.albumStore.activeTrack.idMC && (
+        <IconFeather.Music
           className="player-button"
           onClick={() => {
-            const activeIdWork = this.props.albumStore.activeTrack.idWork;
+            const activeIdWork = this.props.albumStore.activeTrack.idMC;
             const path = ROUTE_KLASSIC_RANK.replace(
               ":idMC",
               activeIdWork.toString()
@@ -189,7 +199,7 @@ export interface IInfoWorkSuperior {
 export class InfoWorkSuperior extends React.Component<IInfoWorkSuperior> {
   render() {
     const activeTrack = this.props.albumStore.activeTrack;
-    debugger;
+
     if (!activeTrack) {
       return "null";
     }
@@ -199,11 +209,9 @@ export class InfoWorkSuperior extends React.Component<IInfoWorkSuperior> {
           text={
             this.props.albumStore.activeTrackComposer +
             ": " +
-            this.props.albumStore.activeTrackWorkName +
-            " " +
-            activeTrack.title
+            this.props.albumStore.activeTrackWorkName
           }
-          maxFontSize={20}
+          maxFontSize={18}
         ></TextFit>
       </div>
     );
@@ -221,7 +229,13 @@ export class InfoWorkInferior extends React.Component<IInfoWorkInferior> {
     if (!activeTrack) {
       return null;
     }
-    return <div>activeTrack.credits</div>;
+    return (
+      <div>
+        <ActiveCredits
+          credits={this.props.albumStore?.activeTrackPrimaryCredits}
+        />
+      </div>
+    );
   }
 }
 
@@ -251,12 +265,9 @@ export class DzPlayBtn extends React.Component<IPropsDzPlayBtn> {
 
   render() {
     var button = this.state.isPlaying ? (
-      <Icon.PauseCircle
-        className="play-button"
-        onClick={() => togglePlayer()}
-      />
+      <Icon className="pause" onClick={() => togglePlayer()} />
     ) : (
-      <Icon.PlayCircle className="play-button" onClick={() => togglePlayer()} />
+      <Icon className="play" onClick={() => togglePlayer()} />
     );
 
     return <div>{button}</div>;
@@ -267,6 +278,13 @@ interface IPropsDzPlayBtn {}
 export class DzPlayBtnNew extends React.Component<IPropsDzPlayBtn> {
   constructor(props: IPropsDzPlayBtn) {
     super(props);
+    var that = this;
+    window.DZ.Event.subscribe("player_play", () => {
+      that.setState({ isPlaying: true });
+    });
+    window.DZ.Event.subscribe("player_paused", () => {
+      that.setState({ isPlaying: false });
+    });
     this.state = {
       isPlaying: false
     };
@@ -276,22 +294,20 @@ export class DzPlayBtnNew extends React.Component<IPropsDzPlayBtn> {
     isPlaying: boolean;
   };
 
-  componentDidMount() {
-    var that = this;
-    window.DZ.Event.subscribe("player_play", () => {
-      that.setState({ isPlaying: true });
-    });
-
-    window.DZ.Event.subscribe("player_paused", () => {
-      that.setState({ isPlaying: false });
-    });
-  }
-
   render() {
+    const className = this.state.isPlaying ? "pause" : "play";
     return (
-      <button className="button play-pause" onClick={() => togglePlayer()}>
-        <div className="arrow" />
-      </button>
+      <Icon
+        style={{
+          color: "white",
+          width: 20,
+          cursor: "pointer",
+          textAlign: "middle"
+        }}
+        size={"big"}
+        className={className}
+        onClick={() => togglePlayer()}
+      />
     );
   }
 }

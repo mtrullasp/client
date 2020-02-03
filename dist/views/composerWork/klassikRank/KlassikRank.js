@@ -22,28 +22,53 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var react_router_1 = require("react-router");
 var mobx_react_1 = require("mobx-react");
-var semantic_ui_react_1 = require("semantic-ui-react");
 var MaxHeightContainer_1 = require("../../../widgets/MaxHeightContainer");
-var react_router_dom_1 = require("react-router-dom");
-var constants_1 = require("../../../util/constants");
+var KlassikRankPlayList_1 = require("../../album/playlist/KlassikRankPlayList");
+var PlayerBar_new_1 = require("../../../moduls/player/PlayerBar.new");
 var IMAGE_SIZE = 200;
 var KlassikRank = (function (_super) {
     __extends(KlassikRank, _super);
     function KlassikRank(props, context) {
         var _this = _super.call(this, props, context) || this;
-        props.albumStore.getKlassikRank(props.match.params["idWork"], props.match.params["idMCord"]);
+        props.albumStore.getKlassikRank(props.match.params["idMC"], props.match.params["idMCord"]);
         return _this;
     }
     KlassikRank.prototype.render = function () {
-        return (React.createElement(MaxHeightContainer_1.default, { style: { overflowY: "auto" } },
-            React.createElement(semantic_ui_react_1.List, { relaxed: true, size: "big" }, this.props.albumStore.klassikRankWebApi &&
-                this.props.albumStore.klassikRankWebApi.map(function (k) {
-                    return (React.createElement(semantic_ui_react_1.List.Item, null,
-                        React.createElement(react_router_dom_1.Link, { to: constants_1.ROUTE_ALBUM_TRACKS.replace(":idAlbum", k.idAlbum.toString()) },
-                            React.createElement("img", { src: k.coverBig, style: { width: IMAGE_SIZE, height: IMAGE_SIZE } }),
-                            " ",
-                            k.albumName)));
-                }))));
+        if (!this.props.albumStore.klassikRank) {
+            return null;
+        }
+        var tracks = this.props.albumStore.klassikRank.tracks.map(function (k) {
+            return {
+                imgCover: k.coverBig,
+                name: k.albumName,
+                idTrack_DZ: k.idTrack,
+                duration: k.duration,
+                mainArtists: k.mainArtists
+            };
+        });
+        var works = [
+            {
+                workName: this.props.albumStore.klassikRank.workName,
+                workItemOrder: this.props.albumStore.klassikRank.workItemOrder,
+                workItemName: this.props.albumStore.klassikRank.workItemName,
+                workComposerName: this.props.albumStore.klassikRank
+                    .workComposerName,
+                tracks: tracks
+            }
+        ];
+        return (React.createElement(MaxHeightContainer_1.default, { style: { overflowY: "hidden" }, footerHeight: 100 },
+            React.createElement(KlassikRankPlayList_1.default, { title: "", works: works }),
+            React.createElement("div", { style: {
+                    position: "fixed",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: 70,
+                    overflow: "hidden",
+                    background: "#eee",
+                    opacity: 0.9
+                } },
+                React.createElement(PlayerBar_new_1.default, null))));
     };
     KlassikRank.defaultProps = {};
     KlassikRank = __decorate([

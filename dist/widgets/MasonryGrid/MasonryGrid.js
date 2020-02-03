@@ -56,29 +56,35 @@ var MasonryGrid = (function (_super) {
         var masonryOptions = {
             transitionDuration: 1000
         };
+        debugger;
         return (React.createElement(react_container_dimensions_1.default, null, function (_a) {
             var width = _a.width, height = _a.height;
             var delta = 20;
             width -=
-                _this.props.gutter * _this.props.numColumns +
-                    constants_1.MARGIN_HORITZONTAL +
-                    constants_1.SCROLLBAR_WIDTH;
-            var columnHeight = (width / _this.props.numColumns) * _this.props.factorY;
+                _this.props.gutter * _this.props.numColumns + constants_1.SCROLLBAR_WIDTH;
+            var columnHeight = (width / _this.props.numColumns) * 1;
             return _this.props.gridEngine === "stonecutter" ? (React.createElement("div", { style: __assign({}, _this.props.style) },
-                React.createElement(SpringGrid, { component: "div", columns: _this.props.numColumns, columnWidth: width / _this.props.numColumns, gutterWidth: 20, gutterHeight: 20, itemHeight: columnHeight, springConfig: {
+                React.createElement(SpringGrid, { component: "div", columns: _this.props.numColumns, columnWidth: width / _this.props.numColumns, gutterWidth: _this.props.gutter, gutterHeight: _this.props.gutter, itemHeight: columnHeight, springConfig: {
                         stiffness: _this.props.stiffness,
                         damping: _this.props.damping,
                         zIndex: 0
                     } }, (isFunction(_this.props.items)
                     ? _this.props.items(width / _this.props.numColumns, height / _this.props.numColumns)
-                    : _this.props.items).slice(0, constants_1.MAX_ITEMS_MASONRY)))) : (React.createElement(ReactGallery, { thumbnailHeight: 80, images: _this.props.items, tagStyle: {
-                    color: "white",
-                    fontSize: 16,
-                    fontWeight: 400,
-                    backgroundColor: "rgba(0,0,0,0.8)"
-                }, enableLightbox: true, enableImageSelection: true, onClickThumbnail: function (index) {
-                    _this.props.onClickThumbnail(_this.props.items[index]);
-                } }));
+                    : _this.props.items).slice(0, constants_1.MAX_ITEMS_MASONRY)))) : (React.createElement("div", { style: {
+                    display: "block",
+                    minHeight: "1px",
+                    width: "100%",
+                    border: "1px solid #ddd",
+                    overflow: "auto"
+                } },
+                React.createElement(ReactGallery, { images: _this.props.items, tagStyle: {
+                        color: "white",
+                        fontSize: 16,
+                        fontWeight: 400,
+                        backgroundColor: "rgba(0,0,0,0.8)"
+                    }, enableLightbox: true, onClickThumbnail: function (index) {
+                        _this.props.onClickThumbnail(_this.props.items[index]);
+                    } })));
         }));
     };
     MasonryGrid.defaultProps = {

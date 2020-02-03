@@ -3,6 +3,7 @@
   src="http://cdn-files.deezer.com/js/min/dz.js"
 ></script>
 <html>
+  <meta http-equiv="Content-Security-Policy" >
   <head>
     <title>Classical Experience. next</title>
     <link
@@ -14,13 +15,16 @@
       rel="stylesheet"
       href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.1/dist/semantic.min.css"
     />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
   </head>
   <body style="margin: 0; overflow-y: hidden;">
     <div class="wraper">
       <div id="root" style="overflow-y: hidden;"></div>
       <div id="dz-root" style="display:none"></div>
     </div>
-    <script src="//cdns-files.deezer.com/js/min/dz.js"></script>
+    <script src="https://e-cdns-files.dzcdn.net/js/min/dz.js"></script>
     <!--<script src="https://e-cdns-files.dzcdn.net/js/min/dz.js"></script>-->
     <script>
       DZ.init({
@@ -28,8 +32,8 @@
         channelUrl: "http://moises-pc:3003/channel.html",
         player: {
           onload: function() {
-            //alert("loaded ikts");
-            //DZ.player.playAlbum(2962681, true);
+            // alert("loaded ikts");
+            // DZ.player.playAlbum(2962681, true);
           }
         }
       });
@@ -71,5 +75,11 @@
 -->
     <script src="./src/index.tsx"></script>
     <!--<script src="/static/bundle.js"></script>-->
+    <style>
+      .leaflet-container {
+        height: 500px;
+        width: 100%;
+      }
+    </style>
   </body>
 </html>

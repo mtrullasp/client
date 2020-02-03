@@ -12,6 +12,9 @@ import AlbumStore from "../../../core/stores/AlbumStore";
 import SearchInput from "../../../core/search/SearchInput";
 import { style } from "typestyle";
 import LazyLoad from "react-lazy-load";
+import { Table } from "semantic-ui-react";
+import DivInline from "../../../widgets/DivInline.";
+import MaxHeightContainer from "../../../widgets/MaxHeightContainer";
 
 interface IProps {
   composerStore?: ComposerStore;
@@ -29,7 +32,117 @@ class ComposerWorksCollection extends React.Component<IProps, {}> {
   static defaultProps = {};
 
   render() {
-    debugger;
+    const tableItems = this.props.composerStore.activeComposerWorks.map(
+      (cw, i) => {
+        return (
+          <Table.Row
+            style={{ paddingRight: 20, cursor: "pointer" }}
+            onClick={() => {
+              this.props.albumStore.searchByWork(cw.idWork);
+              this.props.history.push(ROUTE_ALBUMS_COLLECTION);
+            }}
+          >
+            <Table.Cell>{cw.composedDate}</Table.Cell>
+            <Table.Cell>{cw.atAgeOf}</Table.Cell>
+            <Table.Cell>{cw.nameWork}</Table.Cell>
+            <Table.Cell>{cw.workGenre}</Table.Cell>
+            <Table.Cell>{cw.performancesCount}</Table.Cell>
+          </Table.Row>
+        );
+      }
+    );
+
+    const cs = this.props.composerStore;
+
+    return (
+      <Table sortable={true} basic={"very"} selectable={true}>
+        <Table.Header fullWidth>
+          <Table.Row>
+            <Table.HeaderCell
+              sorted={
+                cs.sortComposerWorksKey === "composedDate"
+                  ? cs.sortComposerWorksKeyDir
+                  : null
+              }
+              onClick={() => {
+                this.props.composerStore.sortComposerWorksKey = "composedDate";
+                this.props.composerStore.toggleSortComposerWorks(
+                  "composedDate"
+                );
+              }}
+            >
+              composed
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={
+                cs.sortComposerWorksKey === "atAgeOf"
+                  ? cs.sortComposerWorksKeyDir
+                  : null
+              }
+              onClick={() => {
+                this.props.composerStore.sortComposerWorksKey = "atAgeOf";
+                this.props.composerStore.toggleSortComposerWorks("atAgeOf");
+              }}
+            >
+              age
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <Search
+                width="wide"
+                showNoResults={false}
+                input={{
+                  className: style({ borderColor: "black" }),
+                  fluid: true,
+                  placeholder: "name"
+                }}
+                minCharacters={2}
+                size={"small"}
+                category
+                onSearchChange={(
+                  event: React.MouseEvent<any>,
+                  data: SearchProps
+                ) => {
+                  this.props.composerStore.worksFilter = data.value;
+                }}
+                {...this.props}
+              />
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={
+                cs.sortComposerWorksKey === "workGenre"
+                  ? cs.sortComposerWorksKeyDir
+                  : null
+              }
+              onClick={() => {
+                this.props.composerStore.sortComposerWorksKey = "workGenre";
+                this.props.composerStore.toggleSortComposerWorks("workGenre");
+              }}
+            >
+              genre
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={
+                cs.sortComposerWorksKey === "performancesCount"
+                  ? cs.sortComposerWorksKeyDir
+                  : null
+              }
+              onClick={() => {
+                this.props.composerStore.sortComposerWorksKey =
+                  "performancesCount";
+                this.props.composerStore.toggleSortComposerWorks(
+                  "performancesCount"
+                );
+              }}
+            >
+              #rec
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body style={{ overflowY: "auto" }}>{tableItems}</Table.Body>
+      </Table>
+    );
+
+    /*
     const items = this.props.composerStore.activeComposerWorks.map((cw, i) => {
       return (
         <List.Item key={i}>
@@ -83,6 +196,7 @@ class ComposerWorksCollection extends React.Component<IProps, {}> {
         </List>
       </div>
     );
+*/
   }
 }
 

@@ -36,6 +36,7 @@ var mobx_react_1 = require("mobx-react");
 var typestyle_1 = require("typestyle");
 var Search_1 = require("semantic-ui-react/dist/commonjs/modules/Search");
 var react_router_1 = require("react-router");
+var paleta_1 = require("../../../styles/paleta");
 var ComposersToolbar = (function (_super) {
     __extends(ComposersToolbar, _super);
     function ComposersToolbar(props, context) {
@@ -60,15 +61,20 @@ var ComposersToolbar = (function (_super) {
             }
             return "";
         };
+        var borderRadius = 0;
+        var itemStyle = { backgroundColor: "white" };
+        var styleMenu = {
+            border: paleta_1.default.color100 + " solid 1px",
+            backgroundColor: "#F7F5F4"
+        };
         return (React.createElement("div", null,
-            React.createElement(semantic_ui_react_1.Menu, { size: "tiny", compact: true, style: { backgroundColor: "white" } },
-                React.createElement(semantic_ui_react_1.Menu.Item, { header: true }, "Sort By"),
+            React.createElement(semantic_ui_react_1.Menu, __assign({ compact: true, size: "tiny", text: true }, ),
+                React.createElement(semantic_ui_react_1.Menu.Item, __assign({ header: true }, ), "Sort By"),
                 React.createElement(semantic_ui_react_1.Menu.Item, { name: "Ranking", icon: iconaSort("ranking"), key: "ranking", onClick: function () { return _this.props.composerStore.setOrderBy("ranking"); }, active: activeOrderKey === "ranking" }),
-                React.createElement(semantic_ui_react_1.Menu.Item, { name: "Birth Date", key: "AnyoNeix", onClick: function () { return _this.props.composerStore.setOrderBy("AnyoNeix"); }, active: activeOrderKey === "AnyoNeix" }),
+                React.createElement(semantic_ui_react_1.Menu.Item, { name: "Birth Date", icon: iconaSort("AnyoNeix"), key: "AnyoNeix", onClick: function () { return _this.props.composerStore.setOrderBy("AnyoNeix"); }, active: activeOrderKey === "AnyoNeix" }),
                 React.createElement(semantic_ui_react_1.Menu.Item, { name: "Shuffle", key: "shuffle", onClick: function () { return _this.props.composerStore.shuffle(); } })),
-            React.createElement("span", { style: { marginRight: 20 } }),
-            React.createElement(semantic_ui_react_1.Menu, { size: "tiny", compact: true, style: { backgroundColor: "white" } },
-                React.createElement(semantic_ui_react_1.Menu.Item, { header: true }, "Group By"),
+            React.createElement(semantic_ui_react_1.Menu, { style: { marginLeft: 40, opacity: 1 }, size: "tiny", compact: true, text: true },
+                React.createElement(semantic_ui_react_1.Menu.Item, { header: true, style: { borderRadius: 20 } }, "Group By"),
                 React.createElement(semantic_ui_react_1.Menu.Item, { name: "Nation", key: "nation", onClick: function () {
                         _this.props.composerStore.isGroupedByNation = !_this.props
                             .composerStore.isGroupedByNation;
@@ -79,6 +85,7 @@ var ComposersToolbar = (function (_super) {
                 } },
                 React.createElement(Search_1.default, __assign({ showNoResults: false, input: {
                         className: typestyle_1.style({
+                            borderRadius: 0,
                             borderColor: "black",
                             display: "inline-flex",
                             width: 200,

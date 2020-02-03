@@ -26,18 +26,18 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 require("./css/style.css");
+var semantic_ui_react_1 = require("semantic-ui-react");
 var Button3d = (function (_super) {
     __extends(Button3d, _super);
     function Button3d(props, context) {
         return _super.call(this, props, context) || this;
     }
     Button3d.prototype.render = function () {
-        return (React.createElement("div", { className: "container", style: __assign({ position: "absolute", top: this.props.top, left: this.props.left, height: "unset", lineHeight: "0px", verticalAlign: "middle" }, this.props.style), onClick: this.props.onClick },
-            React.createElement("a", { className: "button", style: {
-                    height: this.props.buttonHeight,
-                    fontSize: 12,
-                    padding: this.props.buttonPadding || 15
-                } }, this.props.text)));
+        return (React.createElement("div", { className: "button3d-container", style: __assign({ position: "absolute", top: this.props.top, left: this.props.left, height: "unset", lineHeight: "0px", verticalAlign: "middle" }, this.props.style), onClick: this.props.onClick },
+            React.createElement("li", { id: "LI_1" }, this.props.isIcon ? (React.createElement("a", { id: "A_2", style: __assign({}, this.props.childStyle) },
+                React.createElement("span", { id: "SPAN_3", style: { width: 10, textAlign: "center" } },
+                    React.createElement(semantic_ui_react_1.Icon, { name: this.props.text, size: this.props.size || "large", style: __assign({ marginTop: -10, textAlign: "center", position: "relative", left: -5, top: 2 }, this.props.iconStyle) })))) : (React.createElement("a", { id: "A_2", style: __assign({}, this.props.childStyle) },
+                React.createElement("span", { id: "SPAN_3", style: __assign({}, this.props.childStyle) }, this.props.text))))));
     };
     return Button3d;
 }(React.Component));

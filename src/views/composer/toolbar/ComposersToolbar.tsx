@@ -1,12 +1,27 @@
 import * as React from "react";
-import { Divider, Menu, MenuItemProps, SearchProps } from "semantic-ui-react";
+import {
+  Container,
+  Divider,
+  Menu,
+  MenuItemProps,
+  SearchProps,
+  Segment,
+  SegmentGroup
+} from "semantic-ui-react";
 import { inject, observer } from "mobx-react";
 import ComposerStore from "../../../core/stores/ComposerStore";
 import { style } from "typestyle";
 import Search from "semantic-ui-react/dist/commonjs/modules/Search";
 import { History } from "history";
-import { ROUTE_COMPOSERS_COLLECTION_BY_NACIO } from "../../../util/constants";
+import {
+  ROUTE_COMPOSERS_COLLECTION_BY_NACIO,
+  TOOLBAR_COLOR
+} from "../../../util/constants";
 import { withRouter } from "react-router";
+import Button3d from "../../../widgets/3dbutton/Button3d";
+import { CSSProperties } from "react";
+import paleta from "../../../styles/paleta";
+import { MenuDivider } from "@blueprintjs/core";
 
 interface IProps {
   composerStore?: ComposerStore;
@@ -23,7 +38,7 @@ class ComposersToolbar extends React.Component<IProps, {}> {
     const activeOrderKey = this.props.composerStore.orderByKey;
     const activeOrderDir = this.props.composerStore.orderByDir;
     const cs = this.props.composerStore;
-    const iconaSort = (key: string ): string => {
+    const iconaSort = (key: string): string => {
       if (!key || !key.length) {
         return "";
       }
@@ -36,10 +51,18 @@ class ComposersToolbar extends React.Component<IProps, {}> {
       }
       return "";
     };
+    const borderRadius = 0;
+    const itemStyle: CSSProperties = { backgroundColor: "white" };
+    const styleMenu: CSSProperties = {
+      border: paleta.color100 + " solid 1px",
+      backgroundColor: "#F7F5F4"
+    };
     return (
       <div>
-        <Menu size="tiny" compact={true} style={{ backgroundColor: "white" }}>
-          <Menu.Item header>Sort By</Menu.Item>
+        <Menu compact size={"tiny"} text {/*style={{ borderRadius: borderRadius }}*/}>
+          <Menu.Item header {/*style={{ borderRadius: borderRadius, ...itemStyle }}*/}>
+            Sort By
+          </Menu.Item>
           <Menu.Item
             name="Ranking"
             icon={iconaSort("ranking")}
@@ -49,20 +72,42 @@ class ComposersToolbar extends React.Component<IProps, {}> {
           />
           <Menu.Item
             name="Birth Date"
+            icon={iconaSort("AnyoNeix")}
             key={"AnyoNeix"}
             onClick={() => this.props.composerStore.setOrderBy("AnyoNeix")}
             active={activeOrderKey === "AnyoNeix"}
+            /*style={itemStyle}*/
           />
           <Menu.Item
             name="Shuffle"
             key={"shuffle"}
             onClick={() => this.props.composerStore.shuffle()}
+/*
+            style={{
+              borderBottomRightRadius: borderRadius,
+              borderTopRightRadius: borderRadius,
+              opacity: 1
+            }}
+*/
           />
         </Menu>
-        <span style={{ marginRight: 20 }} />
-        <Menu size="tiny" compact={true} style={{ backgroundColor: "white" }}>
-          <Menu.Item header>Group By</Menu.Item>
+        <Menu
+          style={{ marginLeft: 40, opacity: 1 }}
+          size="tiny"
+          compact={true}
+          text
+        >
+          <Menu.Item header style={{ borderRadius: 20 }}>
+            Group By
+          </Menu.Item>
           <Menu.Item
+/*
+            style={{
+              borderBottomRightRadius: borderRadius,
+              borderTopRightRadius: borderRadius,
+              opacity: 1
+            }}
+*/
             name="Nation"
             key={"nation"}
             onClick={() => {
@@ -82,6 +127,7 @@ class ComposersToolbar extends React.Component<IProps, {}> {
             showNoResults={false}
             input={{
               className: style({
+                borderRadius: 0,
                 borderColor: "black",
                 display: "inline-flex",
                 width: 200,

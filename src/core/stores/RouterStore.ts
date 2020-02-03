@@ -39,6 +39,10 @@ export class RouterStore {
 
   @observable activeRouterPath: string;
 
+  @computed get isRandom(): boolean {
+    return this.activeRouterPath.endsWith("random");
+  }
+
   public callbackTitleBar: () => JSX.Element;
 
 }

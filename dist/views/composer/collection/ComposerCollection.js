@@ -30,6 +30,7 @@ var ComposersGroupedByNacio_1 = require("../toolbar/ComposersGroupedByNacio");
 require("@material/elevation/dist/mdc.elevation.min.css");
 var ComposerCollectionItem_1 = require("./ComposerCollectionItem");
 var MyCollection_1 = require("../../../widgets/MyCollection/MyCollection");
+var framer_motion_1 = require("framer-motion");
 require("../../../styles/portfolio.css");
 var FACTOR_Y = 1.1;
 var ComposerCollection = (function (_super) {
@@ -46,19 +47,20 @@ var ComposerCollection = (function (_super) {
         var items = function (width, height) {
             return _this.props.composerStore.composers.map(function (composer, index) {
                 var contentBase = function (opacity) {
-                    return (React.createElement(ComposerCollectionItem_1.default, { width: width, index: index, composer: composer }));
+                    return (React.createElement(ComposerCollectionItem_1.default, { onClick: function (c) {
+                            debugger;
+                            _this.props.composerStore.setActiveComposerId(c.idMN);
+                            _this.props.history.push(constants_1.ROUTE_COMPOSER_ITEM);
+                        }, width: width, index: index, composer: composer }));
                 };
                 return (React.createElement("div", { onMouseEnter: function () {
                         _this.props.composerStore.indexHover = index;
                     }, onMouseLeave: function () {
                         _this.props.composerStore.indexHover = -1;
-                    }, onClick: function (e) {
-                        _this.props.composerStore.activeIndex = index;
-                        _this.props.history.push(constants_1.ROUTE_COMPOSERS_ITEM);
                     }, onKeyDown: function (e) {
                         if (e.keyCode === 13) {
                             _this.props.composerStore.activeIndex = index;
-                            _this.props.history.push(constants_1.ROUTE_COMPOSERS_ITEM);
+                            _this.props.history.push(constants_1.ROUTE_COMPOSER_ITEM);
                         }
                     }, key: composer.IdComposer, className: typestyle_1.style({
                         cursor: "pointer",
@@ -67,14 +69,20 @@ var ComposerCollection = (function (_super) {
                     React.createElement("div", null, contentBase(0.6))));
             });
         };
-        return (React.createElement(MyCollection_1.default, { headerContent: React.createElement(ComposersToolbar_1.default, null), asideLeftContent: this.props.composerStore.isGroupedByNation ? (React.createElement(ComposersGroupedByNacio_1.default, null)) : null, sectionContent: React.createElement(MaxHeightContainer_1.default, { style: {
-                    position: "relative",
-                    top: 10,
-                    width: "100%"
-                }, footerHeight: 50 },
-                React.createElement(MaxHeightContainer_1.default, { style: {} },
-                    React.createElement("div", { style: { margin: 0 } },
-                        React.createElement(MasonryGrid_1.default, { gutter: 0, numColumns: constants_1.COMPOSER_NUMBER_COLS, items: items, factorY: FACTOR_Y })))) }));
+        return (React.createElement(framer_motion_1.motion.div, { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: {
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+                duration: 10000
+            }, style: {} },
+            React.createElement(MyCollection_1.default, { headerContent: React.createElement(ComposersToolbar_1.default, null), asideLeftContent: this.props.composerStore.isGroupedByNation ? (React.createElement(ComposersGroupedByNacio_1.default, null)) : null, sectionContent: React.createElement(MaxHeightContainer_1.default, { style: {
+                        position: "relative",
+                        top: 0,
+                        width: "100%"
+                    }, footerHeight: 50 },
+                    React.createElement(MaxHeightContainer_1.default, { style: { overflowY: "auto" } },
+                        React.createElement("div", { style: { margin: 0 } },
+                            React.createElement(MasonryGrid_1.default, { style: { margin: 5 }, gutter: 0, numColumns: constants_1.COMPOSER_NUMBER_COLS, items: items, factorY: FACTOR_Y })))) })));
     };
     ComposerCollection = __decorate([
         mobx_react_1.inject("composerStore"),

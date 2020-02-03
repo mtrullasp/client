@@ -11,9 +11,9 @@ import {
   ELEGANT_FONT,
   MARGIN_HORITZONTAL,
   ROUTE_ALBUMS_COLLECTION,
-  ROUTE_COMPOSERS_ITEM,
-  ROUTE_PERFORMER_ALBUMS,
-  SECOND_ACCENT_COLOR
+  ROUTE_COMPOSERS_ITEM_WORKS,
+  ROUTE_PERFORMER,
+  TRUE_ACCENT_COLOR
 } from "../../../util/constants";
 import { Row } from "react-flexbox-grid";
 import { style } from "typestyle";
@@ -24,6 +24,7 @@ import paleta from "../../../styles/paleta";
 import { History } from "history";
 import { match } from "react-router";
 import AlbumStore from "../../../core/stores/AlbumStore";
+import MyReactGallery from "../../../widgets/MasonryGrid/ReactGallery";
 
 interface IState {
   indexHover: number;
@@ -40,7 +41,7 @@ interface IProps {
 class PerformerCollection extends React.Component<IProps, {}> {
   constructor(props: IProps, context: any) {
     super(props, context);
-    debugger;
+
     props.performerStore.activePerformerIdRol = Number(
       props.match.params["idRol"]
     );
@@ -165,6 +166,8 @@ class PerformerCollection extends React.Component<IProps, {}> {
           src: "http://127.0.1.0/PictureArtist/" + performer.idMN + ".jpg",
           thumbnail:
             "http://127.0.1.0/PictureArtist/" + performer.idMN + ".jpg",
+          thumbnailWidth: performer.widthImage,
+          thumbnailHeight: performer.heightImage,
           performer: performer,
           tags: [{ value: performer.nameMN, title: "" }]
         };
@@ -186,8 +189,8 @@ class PerformerCollection extends React.Component<IProps, {}> {
         >
           <div
             style={{
-              width: "100%",
-              marginRight: MARGIN_HORITZONTAL / 2,
+                /*width: "100%",*/
+              marginRight: MARGIN_HORITZONTAL,
               overflowY: "auto"
             }}
           >
@@ -202,13 +205,13 @@ class PerformerCollection extends React.Component<IProps, {}> {
               />
 */}
             </div>
-            <MasonryGrid
+            <MyReactGallery
               onClickThumbnail={(item: { performer: IPerformer }) => {
                 this.props.albumStore.activeArtistIdMN = item.performer.idMN;
                 this.props.albumStore.activeArtistNameMN =
                   item.performer.nameMN;
                 this.props.history.push(
-                  "/performer/" + item.performer.idMN + "/albums"
+                  "/performer/" + item.performer.idMN
                 );
 
                 // this.props.albumStore.activeArtistIdMN = item.performer.idMN;

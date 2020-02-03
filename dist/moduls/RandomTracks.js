@@ -20,17 +20,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var AlbumTracksItem_1 = require("../views/album/tracks/AlbumTracksItem");
 var mobx_react_1 = require("mobx-react");
+var AlbumItemDetailRandom_1 = require("../views/album/tracks/AlbumItemDetailRandom");
+var ErrorBoundary_1 = require("../util/ErrorBoundary");
 var RandomTracks = (function (_super) {
     __extends(RandomTracks, _super);
     function RandomTracks(props, context) {
         var _this = _super.call(this, props, context) || this;
-        props.albumStore.getRandomTrack();
+        props.albumStore.getRandomTrack.call(props.albumStore);
         return _this;
     }
     RandomTracks.prototype.render = function () {
-        return React.createElement(AlbumTracksItem_1.default, null);
+        if (!this.props.albumStore.activeAlbum) {
+            return null;
+        }
+        return (React.createElement(ErrorBoundary_1.default, null,
+            React.createElement(AlbumItemDetailRandom_1.default, null)));
     };
     RandomTracks = __decorate([
         mobx_react_1.inject("albumStore"),

@@ -23,7 +23,7 @@ var TitleBar = (function (_super) {
     TitleBar.prototype.render = function () {
         return (React.createElement("div", { style: {
                 fontSize: 20,
-                color: constants_1.SECOND_ACCENT_COLOR
+                color: constants_1.TRUE_ACCENT_COLOR
             } }, this.props.content));
     };
     return TitleBar;

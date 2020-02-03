@@ -1,6 +1,6 @@
 import * as React from "react";
 import { inject, observer } from "mobx-react";
-import AlbumStore from "../../../core/stores/AlbumStore";
+import AlbumStore, { ICreditLink } from "../../../core/stores/AlbumStore";
 import { Container, Grid } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { History } from "history";
@@ -11,6 +11,7 @@ interface IProps {
   albumStore?: AlbumStore;
   routerStore?: RouterStore;
   style?: CSSProperties;
+  credits: Array<ICreditLink>;
 }
 @inject("albumStore")
 @inject("routerStore")
@@ -36,7 +37,7 @@ class ActiveCredits extends React.Component<IProps, {}> {
                     this.props.albumStore.activeArtistIdMN = credit.idMN;
                     this.props.albumStore.activeArtistNameMN = credit.nameMN;
                     this.props.routerStore.go(
-                      "/performer/" + credit.idMN + "/albums"
+                      "/performer/" + credit.idMN
                     );
                   }}
                 >

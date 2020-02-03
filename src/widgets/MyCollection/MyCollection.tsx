@@ -15,9 +15,9 @@ class MyCollection extends React.Component<IProps, {}> {
     const xsLeft = !!this.props.asideLeftContent ? 2 : 0;
     const xsRight = !!this.props.asideLeftContent ? 14 : 16;
     return (
-      <Grid columns={16} relaxed={"very"} >
+      <Grid columns={16} relaxed={"very"}>
         <Grid.Row columns={16}>
-          <Grid.Column width={16} style={{ marginTop: 5 }}>
+          <Grid.Column width={16} style={{ marginTop: 0 }}>
             {this.props.headerContent}
           </Grid.Column>
         </Grid.Row>

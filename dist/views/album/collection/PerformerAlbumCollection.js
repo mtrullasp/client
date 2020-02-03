@@ -20,7 +20,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var TitleBar_1 = require("../../../core/layout/TitleBar");
 var mobx_react_1 = require("mobx-react");
 var AlbumCollection_1 = require("./AlbumCollection");
 var PerformerAlbumCollection = (function (_super) {
@@ -29,16 +28,8 @@ var PerformerAlbumCollection = (function (_super) {
         return _super.call(this, props, context) || this;
     }
     PerformerAlbumCollection.prototype.render = function () {
-        var titleBar = (React.createElement("h1", null,
-            this.props.albumStore.activeArtistNameMN,
-            ".",
-            " ",
-            React.createElement("span", { style: { fontWeight: 200 } }, "Discography")));
         return (React.createElement("div", null,
-            React.createElement("div", null,
-                React.createElement(TitleBar_1.default, { content: titleBar })),
-            React.createElement("div", null,
-                React.createElement(AlbumCollection_1.default, null))));
+            React.createElement(AlbumCollection_1.default, null)));
     };
     PerformerAlbumCollection = __decorate([
         mobx_react_1.inject("albumStore"),

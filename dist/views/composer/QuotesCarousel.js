@@ -48,7 +48,7 @@ var QuotesCarousel = (function (_super) {
                         fontSize: 14,
                         fontWeight: 700,
                         height: 25,
-                        color: constants_1.SECOND_ACCENT_COLOR
+                        color: constants_1.TRUE_ACCENT_COLOR
                     } },
                     "\u2014 ",
                     q.contentSourceName.trimRight())));

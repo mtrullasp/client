@@ -39,7 +39,7 @@ var ActiveCredits = (function (_super) {
     }
     ActiveCredits.prototype.render = function () {
         var _this = this;
-        return (React.createElement("p", { style: __assign({}, (this.props.style || {}), { fontSize: 14 }) }, this.props.albumStore.activeTrackCredits &&
+        return (React.createElement("p", { style: __assign(__assign({}, (this.props.style || {})), { fontSize: 14 }) }, this.props.albumStore.activeTrackCredits &&
             this.props.albumStore.activeTrackCredits.map(function (credit) {
                 return (React.createElement(React.Fragment, null,
                     React.createElement("span", null, credit.creditTip),
@@ -49,7 +49,7 @@ var ActiveCredits = (function (_super) {
                             e.stopPropagation();
                             _this.props.albumStore.activeArtistIdMN = credit.idMN;
                             _this.props.albumStore.activeArtistNameMN = credit.nameMN;
-                            _this.props.routerStore.go("/performer/" + credit.idMN + "/albums");
+                            _this.props.routerStore.go("/performer/" + credit.idMN);
                         } }, credit.creditValue),
                     ".",
                     " "));

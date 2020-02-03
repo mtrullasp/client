@@ -2,7 +2,7 @@ import paleta from "../styles/paleta";
 
 export const ZEN = "";
 
-export const ROUTE_COMPOSER = "/content/discover/Me/Composer/:composerId";
+// export const ROUTE_COMPOSER = "/content/discover/Me/Composer/:composerId";
 export const ROUTE_PERFORMERS = "/content/discover/Me/PerformersByInstrument";
 export const ROUTE_PERFORMERS_INSTRUMENT = "/content/discover/Me/PerformersByInstrument/:idInstrument";
 export const ROUTE_ENSEMBLES = "/content/discover/Me/Ensembles";
@@ -41,7 +41,7 @@ export const PLAYER_PLAY_COLOR = "#c4c4b0";
 
 export const MARGIN_LEFT = 40;
 
-export const PSEUDO_BLACK = "black"; //paleta.color900;
+export const PSEUDO_BLACK = "#1b1e23"; // //paleta.color900;
 export const PSEUDO_WHITE = "rgb(253,253,253)";
 
 export const HEADER_TITLE_BACKGROUND_COLOR = "white"; //"#fafafa";
@@ -67,19 +67,23 @@ export const FONT_SLIM = "Nectar Regular";
 export const FONT_SEMI_SLIM = "Nectar Bold";
 
 export const ACCENT_COLOR = "#6D071A"; // "#FF2400"; //"#f05f2a";
-export const SECOND_ACCENT_COLOR = "#454441";
+export const TRUE_ACCENT_COLOR = ACCENT_COLOR; // "#FF411D"; // "#7c0a02"; //"#454441";
+export const TOOLBAR_COLOR = "#F7F5F4";
+export const PLAYER_BAR_COLOR = PSEUDO_BLACK; // "#eeefef";
 export const INTENSE_ACCENT_COLOR = "#3e4351"; // "#D91E18";
 export const URL_WEB_API = "http://moises-pc/nextWebApi/api/";
-export const URL_WEB_API_DZK = "http://moises-pc/nextWebApiDzK/api/"; //"http://localhost:1885/api/";
-export const MARGIN_HORITZONTAL = 100;
+export const WEB_API_DZK = "http://moises-pc/nextWebApiDzK/"; // http://localhost/nextWebApiDzK/api/"; // "http://localhost:1885/api/";
+export const URL_WEB_API_DZK = WEB_API_DZK + "api/"; // http://moises-pc/nextWebApiDzK/api/"; // "http://localhost:1885/api/";
+export const MARGIN_HORITZONTAL = 150;
 export const HEADER_HEIGHT = 60;
 export const MARGIN_CONTENT_VERTICAL = 120;
-export const SCROLLBAR_WIDTH = 15;
+export const SCROLLBAR_WIDTH = 30;
 export const KEY_ENTER = 13;
-export const LIMIT_COMPOSERS = 200;
+export const LIMIT_COMPOSERS = 220;
 export const COMPOSER_NUMBER_COLS = 6;
 export const MAX_ITEMS_MASONRY = 500;
 export const DEFAULT_NUM_MASONRY_COLUMNS = 4;
+export const PATH_COMPOSER_IMAGE = "http://moises-pc/PictureComposerBig/";
 
 // keyboard
 export const ARROW_UP = "ArrowUp";
@@ -89,17 +93,22 @@ export const ARROW_RIGHT = "ArrowRight";
 
 // Routes
 export const ROUTE_COMPOSERS = "/composers";
-export const ROUTE_COMPOSERS_ITEM = ROUTE_COMPOSERS + "/item";
+export const ROUTE_COMPOSER = "/composer";
+export const ROUTE_COMPOSERS_ITEM_WORKS = ROUTE_COMPOSERS + "/itemWorks";
+export const ROUTE_COMPOSER_ITEM = ROUTE_COMPOSER + "/:idComposer";
 export const ROUTE_COMPOSERS_COLLECTION = ROUTE_COMPOSERS + "/collection";
 export const ROUTE_COMPOSERS_COLLECTION_BY_NACIO = ROUTE_COMPOSERS + "/collection/byNacio";
 export const ROUTE_ALBUMS_COLLECTION = "/albums/collection";
 export const ROUTE_ALBUM_TRACKS = "/album/:idAlbum/tracks";
-export const ROUTE_WORK_VERSIONS = "/versions/:idWork/:idMCord";
+export const ROUTE_WORK_VERSIONS = "/versions/:idMC/:idMCord";
 
 export const ROUTE_PERFORMERSROL_COLLECTION = "/performers";
 export const ROUTE_PERFORMER_COLLECTION = "/performers/rol/:idRol";
-export const ROUTE_PERFORMER_ALBUMS = "/performer/:idMN/albums";
+export const ROUTE_PERFORMER = "/performer/:idMN";
 
 export const ROUTE_RANDOM_TRACK = "/track/random";
 
 export const ROUTE_SEARCH_RESULTS = "/searchResults";
+
+export const SORT_ASCENDING = "ascending";
+export const SORT_DESCENDING = "descending";

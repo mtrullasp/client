@@ -5,10 +5,14 @@ import ComposerStore from "../../../core/stores/ComposerStore";
 import { style } from "typestyle";
 import Search from "semantic-ui-react/dist/commonjs/modules/Search";
 import { History } from "history";
-import { ROUTE_COMPOSERS_COLLECTION_BY_NACIO } from "../../../util/constants";
+import {
+  ROUTE_COMPOSERS_COLLECTION_BY_NACIO,
+  TOOLBAR_COLOR
+} from "../../../util/constants";
 import { RouteComponentProps, withRouter } from "react-router";
 import { Store } from "@material-ui/icons";
 import AlbumStore from "../../../core/stores/AlbumStore";
+import { CSSProperties } from "react";
 
 interface IProps extends RouteComponentProps<any> {
   albumStore?: AlbumStore;
@@ -23,10 +27,16 @@ class AlbumsToolbar extends React.Component<IProps> {
   render() {
     // const activeOrderKey = this.props.composerStore.orderByKey;
     // const activeOrderDir = this.props.composerStore.orderByDir;
+    const itemStyle: CSSProperties = { /*backgroundColor: TOOLBAR_COLOR*/ };
     return (
       <div>
-        <Menu size="tiny" compact={true} color={"black"}>
-          <Menu.Item header>Sort By</Menu.Item>
+        <Menu
+          size="tiny"
+          compact={true}
+          color={"black"}
+          text
+        >
+          <Menu.Item style={itemStyle} header>Sort By</Menu.Item>
           <Menu.Item
             name="Date release"
             key={"releaseDate"}
@@ -40,13 +50,14 @@ class AlbumsToolbar extends React.Component<IProps> {
           />
         </Menu>
         <span style={{ marginRight: 20 }} />
-        <Menu size="tiny" compact={true}>
+        <Menu size="tiny" compact={true} text>
           <Menu.Item header>Group By</Menu.Item>
           <Menu.Item
             name="Composer"
-            key={"composer"}
+            key={"composers"}
             onClick={() => {
-              debugger ;this.props.albumStore.setGroupByField("composers")
+              debugger;
+              this.props.albumStore.setGroupByField("composers");
               //this.props.history.push(ROUTE_COMPOSERS_COLLECTION_BY_NACIO);
             }}
             active={false}

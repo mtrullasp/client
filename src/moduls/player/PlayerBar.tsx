@@ -72,7 +72,7 @@ class PlayerBar extends React.Component<IProps, {}> {
             <Row>
               <Col lg={12}>
                 <div
-                  style={{ display: "block", position: "relative", top: -20 }}
+                  style={{ display: "block", position: "relative", top: -20, color: "white" }}
                 >
                   <InfoWorkSuperior />
                 </div>
